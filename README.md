@@ -1,2 +1,3 @@
-# tactics
-SFML-powered Tactics Engine.
+# Superior Tactics
+    - SFML-powered Tactics Engine.
+    - Source in Python 2.7.
