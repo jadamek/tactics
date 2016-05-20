@@ -1,0 +1,19 @@
+-   Statuses
+        Buffs
+        Debuffs
+        Item Bonuses
+        Weather
+-   Events
+        Tile
+        Map (Global)
+        Item?
+-   Animations
+        Skills
+        Players
+-   ExView
+        Zoom
+        Spin
+        Quake
+        etc.
+-   Skills
+-   Classes
