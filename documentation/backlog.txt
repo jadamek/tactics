@@ -1,19 +1,38 @@
--   Statuses
-        Buffs
-        Debuffs
-        Item Bonuses
-        Weather
--   Events
-        Tile
-        Map (Global)
-        Item?
--   Animations
-        Skills
-        Players
--   ExView
-        Zoom
-        Spin
-        Quake
-        etc.
--   Skills
--   Classes
+Roadmap-
+
+-	Viewable Map
+		Tilemap
+			Draw
+		Tile
+			x,y,z
+			height
+			image
+			Draw
+		SpriteTile
+			height
+			Draw		
+-	+ Objects
+-	+ Moving Objects/Controllable Object
+		Cursor		
+			SpriteCursor
+			Cursor:Move(smooth?)
+		ExView
+			Scroll
+-	+ Menus (By Key)
+-	+ Animated Objects
+
+Product Backlog
+	- MapCursor vs. Main Cursor (a hand)
+	- ExView - the rest
+	- Animations
+	- Skills
+	- Statuses
+		* Weather
+		* Buffs
+		* Debuffs
+	- Classes
+	- Factions
+		* Win/Loss
+	- Items
+		* Bonuses (Status?)
+		* Inventory
