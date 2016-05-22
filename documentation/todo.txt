@@ -1,0 +1,3 @@
+- Implement 3-d position sorting
+    - place position and comparison in ZObject class
+    - update tests to be conducted on positional sorts instead of arbitrary IDs

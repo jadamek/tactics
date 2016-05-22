@@ -38,8 +38,16 @@ class Tile(ZObject):
             
         if self.occupant != None:
             self.occupant.lower(z)
+            
+    #----------------------------------------------------------------------------
+    # - Draw (Overload)
+    #----------------------------------------------------------------------------
+    def draw(self, target, states):
+        if self.sprite != None:
+            target.draw(self.sprite, states)
 
 # Members
+    sprite = None
     occupant = None
     position = sf.Vector3(0, 0, 0)
     height = 1.0
