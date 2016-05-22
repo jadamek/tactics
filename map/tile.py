@@ -1,7 +1,11 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../container")
+
+from zlist import *
 import sfml as sf
 
 #================================================================================
-class Tile:
+class Tile(ZObject):
 #================================================================================
 # Represents a single isometric tile, which occupies a 3-D space described by
 # x,y,z position and height.
@@ -15,6 +19,9 @@ class Tile:
     #----------------------------------------------------------------------------
     def rise(self, z):
         self.position.z += z
+        if self.handler != None:
+            self.handler.sortUp()
+        
         if self.occupant != None:
             self.occupant.rise(z)
         
@@ -26,6 +33,9 @@ class Tile:
     #----------------------------------------------------------------------------
     def lower(self, z):
         self.position.z -= z
+        if self.handler != None:
+            self.handler.sortDown()
+            
         if self.occupant != None:
             self.occupant.lower(z)
 
@@ -34,4 +44,3 @@ class Tile:
     position = sf.Vector3(0, 0, 0)
     height = 1.0
 #================================================================================
-    

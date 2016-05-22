@@ -1,7 +1,9 @@
 -   View Map
-        ZList
-            ZObject
-            ZNode
+        ZList       X
+            ZObject X
+            ZNode   X
+        Tilemap
+        Tile
 -   +Cursor
         Movable(smooth)
         ExView

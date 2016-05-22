@@ -1,5 +1,5 @@
 from zlist import *
-import unittest, sfml as sf, random
+import unittest, random
 
 #------------------------------------------------------------------------------------
 class DummyObject(ZObject):

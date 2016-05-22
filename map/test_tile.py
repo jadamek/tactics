@@ -1,5 +1,5 @@
 from tile import Tile
-import unittest, sfml as sf
+import unittest
 
 class TestTiles(unittest.TestCase):
     #--------------------------------------------------------------------------------
