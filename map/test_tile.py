@@ -5,7 +5,7 @@ class TestTiles(unittest.TestCase):
     #--------------------------------------------------------------------------------
     def test_00_tile_initialization(self):
     #--------------------------------------------------------------------------------
-        tile = Tile
+        tile = Tile()
         pass
         
 if __name__ == "__main__":

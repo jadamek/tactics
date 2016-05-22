@@ -1,43 +1,6 @@
 import sfml as sf
 
 #================================================================================
-class ZList:
-#================================================================================
-# Represents a list of drawable objects sorted by a given z-indexing criteria
-#================================================================================
-# Methods
-    #----------------------------------------------------------------------------
-    # - Is Empty?
-    #----------------------------------------------------------------------------
-    def empty(self):
-        return self.head == None
-
-    #----------------------------------------------------------------------------
-    # - Add Object
-    #----------------------------------------------------------------------------
-    # * drawable : Z-Object to be added to this index-sorting list
-    # Adds a Z-Object to the list into its sorted placement.
-    #----------------------------------------------------------------------------
-    def add(self, drawable):
-        node = ZNode(drawable)
-        
-        if self.head != None:
-            node.attach(None, self.head)            
-        self.head = node
-        # TODO: SORT
-
-    #----------------------------------------------------------------------------
-    # - Clear List
-    #----------------------------------------------------------------------------
-    def clear(self):
-        self.head = None
-
-# Members
-    head = None
-#================================================================================
-
-
-#================================================================================
 class ZNode:
 #================================================================================
 # Represents a single sortable node in the Z-indexing list.
@@ -55,7 +18,7 @@ class ZNode:
         self.prev = left
         self.next = right
                 
-        if self.target != None:
+        if self.target != None and target != "head":
             self.target.handler = self
             
     #----------------------------------------------------------------------------
@@ -89,7 +52,7 @@ class ZNode:
     
         self.prev = None
         self.next = None
-        
+               
     #----------------------------------------------------------------------------
     # - Reattach
     #----------------------------------------------------------------------------
@@ -101,11 +64,89 @@ class ZNode:
     def reattach(self, left = None, right = None):
         self.detach()
         self.attach(left, right)
-        
+
+    #----------------------------------------------------------------------------
+    # - Sort Up (Right)
+    #----------------------------------------------------------------------------
+    # Iterates rightward, attaching this node to the first with a higher priority
+    #----------------------------------------------------------------------------
+    def sortUp(self):
+        seeker = self.next
+
+        if seeker != None:
+            while True:
+                if self.target <= seeker.target:
+                    if seeker is not self.next:
+                        self.reattach(seeker.prev, seeker)                                
+                    break
+                elif seeker.next is None:
+                    self.reattach(seeker)
+                    break
+                else:
+                    seeker = seeker.next
+                    
+    #----------------------------------------------------------------------------
+    # - Sort Down (left)
+    #----------------------------------------------------------------------------
+    # Iterates leftward, attaching this node to the first with a lower priority
+    #----------------------------------------------------------------------------
+    def sortDown(self):
+        seeker = self.prev
+
+        while seeker.prev != None:
+            if self.target >= seeker.target:
+                break
+            seeker = seeker.prev
+            
+        if seeker is not self.prev:
+            self.reattach(seeker, seeker.next)        
+
 # Members
     target = None
     prev = None
     next = None
+#================================================================================
+
+#================================================================================
+class ZList:
+#================================================================================
+# Represents a list of drawable objects sorted by a given z-indexing criteria
+#================================================================================
+# Methods
+    #----------------------------------------------------------------------------
+    # - Front
+    #----------------------------------------------------------------------------
+    # Retrieves the first real node of the list, which is always next neighbor of
+    # the head node.
+    #----------------------------------------------------------------------------
+    def front(self):
+        return self.head.next
+        
+    #----------------------------------------------------------------------------
+    # - Is Empty?
+    #----------------------------------------------------------------------------
+    def empty(self):
+        return self.head.next == None
+
+    #----------------------------------------------------------------------------
+    # - Add Object
+    #----------------------------------------------------------------------------
+    # * drawable : Z-Object to be added to this index-sorting list
+    # Adds a Z-Object to the list into its sorted placement.
+    #----------------------------------------------------------------------------
+    def add(self, drawable):
+        node = ZNode(drawable, self.head, self.front())                
+        node.attach(self.head, self.front())
+        self.front().sortUp()
+
+    #----------------------------------------------------------------------------
+    # - Clear List
+    #----------------------------------------------------------------------------
+    def clear(self):
+        self.head.next = None
+
+# Members
+    head = ZNode("head")
 #================================================================================
 
 #================================================================================
