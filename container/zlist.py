@@ -168,9 +168,50 @@ class ZObject(sf.Drawable):
         # Detach this object from any ZList it was a part of.
         if self.handler != None:
             self.handler.detach()
-            self.handler = None            
+            self.handler = None
+            
+    #----------------------------------------------------------------------------
+    # - Less Than Comparison (Overload)
+    #----------------------------------------------------------------------------
+    # Returns whether this object is visually lower (behind) another object by
+    # comparing their virtual 3-D positions.
+    #----------------------------------------------------------------------------
+    def __lt__(self, other):
+        if self.position.x + self.position.y == other.position.x + other.position.y:
+            return self.position.z < other.position.z
+        return self.position.x + self.position.y < other.position.x + other.position.y
+        
+    #----------------------------------------------------------------------------
+    # - Greater Than Comparison (Overload)
+    #----------------------------------------------------------------------------
+    # Returns whether this object is visually higher (in front of) another object
+    # by comparing their virtual 3-D positions.
+    #----------------------------------------------------------------------------
+    def __gt__(self, other):
+        if self.position.x + self.position.y == other.position.x + other.position.y:
+            return self.position.z > other.position.z
+        return self.position.x + self.position.y > other.position.x + other.position.y
+        
+    #----------------------------------------------------------------------------
+    # - Less Than Or Equal To Comparison (Overload)
+    #----------------------------------------------------------------------------
+    # Returns whether this object is not visually higher (in front of) another
+    # object by comparing their virtual 3-D positions.
+    #----------------------------------------------------------------------------
+    def __le__(self, other):
+        return not self.__gt__(other)
+        
+    #----------------------------------------------------------------------------
+    # - Greater Than Or Equal To Comparison (Overload)
+    #----------------------------------------------------------------------------
+    # Returns whether this object is not visually lower (behind) another object
+    # by comparing their virtual 3-D positions.
+    #----------------------------------------------------------------------------
+    def __ge__(self, other):
+        return not self.__lt__(other)
     
 # Members
     handler = None
+    position = sf.Vector3(0, 0, 0)
 #================================================================================
     

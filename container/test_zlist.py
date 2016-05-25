@@ -185,6 +185,30 @@ class TestZList(unittest.TestCase):
         self.assertTrue(node.target.id <= node.next.target.id, "Node<" + str(node.target.id) + "> not <= Node<" + str(node.next.target.id) + ">")
         
     zlist = None
+    
+    #--------------------------------------------------------------------------------
+    def test_05_zlist_zobject_ordering(self):
+    #--------------------------------------------------------------------------------
+        obj1 = ZObject()
+        obj2 = ZObject()
         
+        # Equivalent points are reflexive
+        obj1.position.x = random.randint(-100, 100)
+        obj1.position.y = random.randint(-100, 100)
+        obj1.position.z = random.randint(-100, 100)
+        obj2.position = obj2.position.__copy__()
+        
+        self.assertEqual(obj1 < obj2, obj1 > obj2, "Objects with positions <" + str(obj1.position) + "> and <" + str(obj2.position) + "> were not found to reflexively compare.")
+        
+        # Higher z is higher priority
+        obj2.position.z += 50
+        self.assertGreater(obj2, obj1, "Object with position <" + str(obj2.position) + "> was not found greater than <" + str(obj1.position) + ">")
+        
+        # Higher x + y sum is higher priority, and supercedes any comparison of z-coordinate
+        obj1.position.y += 50
+        self.assertGreater(obj1, obj2, "Object with position <" + str(obj1.position) + "> was not found greater than <" + str(obj2.position) + ">")        
+        obj2.position.x += 80
+        self.assertGreater(obj2, obj1, "Object with position <" + str(obj2.position) + "> was not found greater than <" + str(obj1.position) + ">")
+                
 if __name__ == "__main__":
     unittest.main(verbosity = 2)
