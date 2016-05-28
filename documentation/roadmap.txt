@@ -3,7 +3,7 @@
             ZObject X
             ZNode   X
         Tilemap
-        Tile
+        Tile        X
 -   +Cursor
         Movable(smooth)
         ExView
