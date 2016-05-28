@@ -168,7 +168,7 @@ class ZObject(sf.Drawable):
         # Detach this object from any ZList it was a part of.
         if self.handler != None:
             self.handler.detach()
-            self.handler = None
+            del self.handler
             
     #----------------------------------------------------------------------------
     # - Less Than Comparison (Overload)

@@ -10,18 +10,11 @@ class Tile(ZObject):
 # Represents a single isometric tile, which occupies a 3-D space described by
 # x,y,z position and height.
 #================================================================================
-# Methods
-    #----------------------------------------------------------------------------
-    # - Tile Constructor (no-sprite)
-    #----------------------------------------------------------------------------
-    def __init__(self, height = 1.0):
-        if float(height) < 0: height = 0
-        self.height = height
-        
+# Methods        
     #----------------------------------------------------------------------------
     # - Tile Constructor
     #----------------------------------------------------------------------------
-    def __init__(self, sprite, height = 1.0):
+    def __init__(self, sprite = None, height = 1.0):
         if float(height) < 0: height = 0
         self.height = height
         self.sprite = sprite

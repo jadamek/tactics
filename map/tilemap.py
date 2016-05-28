@@ -109,6 +109,29 @@ class Tilemap:
         return True
         
     #----------------------------------------------------------------------------
+    # - Remove Tile
+    #----------------------------------------------------------------------------
+    # * x : x-coordinate of the tile to be removed
+    # * y : y-coordinate of the tile to be removed
+    # * layer : layer (index) of the tile to be removed
+    #----------------------------------------------------------------------------
+    def remove(self, x, y, layer):
+        if x < 0 or x >= self.width or y < 0 or y >= self.length:
+            return False
+        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+            return False
+                
+        if layer > 0:            
+            self.tiles_[y][x][layer - 1].occupant = self.tiles_[y][x][layer].occupant
+            
+        if self.tiles_[y][x][layer].occupant != None:
+            self.tiles_[y][x][layer].occupant.lower(self.tiles_[y][x][layer].height)
+                
+        del self.tiles_[y][x][layer]
+        
+        return True
+        
+    #----------------------------------------------------------------------------
     # - Get Tile At
     #----------------------------------------------------------------------------
     # * x : x-coordinate of the tile to grab
