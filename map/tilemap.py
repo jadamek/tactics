@@ -36,9 +36,75 @@ class Tilemap:
         # Place on the exact top of the highest tile at (x, y)
         if self.tiles_[y][x]:
             z = self.tiles_[y][x][-1].position.z + self.tiles_[y][x][-1].height
+            tile.occupant = self.tiles_[y][x][-1].occupant
+            self.tiles_[y][x][-1].occupant = tile
+            
+            if tile.occupant != None:
+                tile.occupant.rise(tile.height)
             
         tile.position = sf.Vector3(x, y, z)
-        self.tiles_[y][x].append(tile)
+        self.tiles_[y][x].append(tile)                
+
+        return True
+        
+    #----------------------------------------------------------------------------
+    # - Insert Tile
+    #----------------------------------------------------------------------------
+    # * tile : a tile to be placed on the top-most layer
+    # * x : x-coordinate to insert the new tile at
+    # * y : y-coordinate to insert the new tile at
+    # * layer : layer (index) to insert the tile at
+    #----------------------------------------------------------------------------
+    def insert(self, tile, x, y, layer):
+        if x < 0 or x >= self.width or y < 0 or y >= self.length:
+            return False
+        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+            return False
+        
+        z = 0
+        
+        if layer > 0:
+            z = self.tiles_[y][x][layer - 1].position.z + self.tiles_[y][x][layer - 1].height
+            tile.occupant = self.tiles_[y][x][layer - 1].occupant
+            self.tiles_[y][x][layer - 1].occupant = tile
+            
+            if tile.occupant != None:
+                tile.occupant.rise(tile.height)
+            
+        tile.position = sf.Vector3(x, y, z)
+        self.tiles_[y][x].insert(layer, tile)                
+
+        return True
+        
+    #----------------------------------------------------------------------------
+    # - Override Tile
+    #----------------------------------------------------------------------------
+    # * tile : the tile that will replace another
+    # * x : x-coordinate of the tile to be replaced
+    # * y : y-coordinate of the tile to be replaced
+    # * layer : layer (index) of the tile to be replaced
+    #----------------------------------------------------------------------------
+    def replace(self, tile, x, y, layer):
+        if x < 0 or x >= self.width or y < 0 or y >= self.length:
+            return False
+        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+            return False
+                
+        if layer > 0:            
+            self.tiles_[y][x][layer - 1].occupant = tile
+
+        tile.occupant = self.tiles_[y][x][layer].occupant
+            
+        if tile.occupant != None:
+            difference = tile.height - self.tiles_[y][x][layer].height
+            
+            if difference > 0:
+                tile.occupant.rise(difference)
+            elif difference < 0:
+                tile.occupant.lower(difference)
+            
+        tile.position = copy.copy(self.tiles_[y][x][layer].position)
+        self.tiles_[y][x][layer] = tile
 
         return True
         

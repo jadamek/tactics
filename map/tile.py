@@ -12,6 +12,21 @@ class Tile(ZObject):
 #================================================================================
 # Methods
     #----------------------------------------------------------------------------
+    # - Tile Constructor (no-sprite)
+    #----------------------------------------------------------------------------
+    def __init__(self, height = 1.0):
+        if float(height) < 0: height = 0
+        self.height = height
+        
+    #----------------------------------------------------------------------------
+    # - Tile Constructor
+    #----------------------------------------------------------------------------
+    def __init__(self, sprite, height = 1.0):
+        if float(height) < 0: height = 0
+        self.height = height
+        self.sprite = sprite
+
+    #----------------------------------------------------------------------------
     # - Rise
     #----------------------------------------------------------------------------
     # * z : relative height to raise this tile by.
@@ -32,6 +47,9 @@ class Tile(ZObject):
     # Lowers a tile decreasing its z-position and that of any object above it.
     #----------------------------------------------------------------------------
     def lower(self, z):
+        if self.position.z - z < 0:
+            return False
+            
         self.position.z -= z
         if self.handler != None:
             self.handler.sortDown()
