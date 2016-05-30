@@ -159,6 +159,7 @@ class ZObject(sf.Drawable):
     # - Z-Object Contructor
     #----------------------------------------------------------------------------
     def __init__(self):
+        self.position = sf.Vector3()
         sf.Drawable.__init__(self)
     
     #----------------------------------------------------------------------------
@@ -212,6 +213,6 @@ class ZObject(sf.Drawable):
     
 # Members
     handler = None
-    position = sf.Vector3(0, 0, 0)
+    position = sf.Vector3()
 #================================================================================
     

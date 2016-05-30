@@ -15,6 +15,7 @@ class Tile(ZObject):
     # - Tile Constructor
     #----------------------------------------------------------------------------
     def __init__(self, sprite = None, height = 1.0):
+        ZObject.__init__(self)
         if float(height) < 0: height = 0
         self.height = height
         self.sprite = sprite
@@ -60,6 +61,5 @@ class Tile(ZObject):
 # Members
     sprite = None
     occupant = None
-    position = sf.Vector3(0, 0, 0)
     height = 1.0
 #================================================================================

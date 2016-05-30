@@ -1,5 +1,5 @@
 from zlist import *
-import unittest, random
+import unittest, random, copy
 
 #------------------------------------------------------------------------------------
 class DummyObject(ZObject):
@@ -196,7 +196,7 @@ class TestZList(unittest.TestCase):
         obj1.position.x = random.randint(-100, 100)
         obj1.position.y = random.randint(-100, 100)
         obj1.position.z = random.randint(-100, 100)
-        obj2.position = obj2.position.__copy__()
+        obj2.position = copy.copy(obj1.position)
         
         self.assertEqual(obj1 < obj2, obj1 > obj2, "Objects with positions <" + str(obj1.position) + "> and <" + str(obj2.position) + "> were not found to reflexively compare.")
         
