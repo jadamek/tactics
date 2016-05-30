@@ -27,6 +27,9 @@ class Tile(ZObject):
     # Raises a tile increasing its z-position and that of any object above it.
     #----------------------------------------------------------------------------
     def rise(self, z):
+        if z < 0:
+            return False
+            
         self.position.z += z
         if self.handler != None:
             self.handler.sortUp()
@@ -41,8 +44,10 @@ class Tile(ZObject):
     # Lowers a tile decreasing its z-position and that of any object above it.
     #----------------------------------------------------------------------------
     def lower(self, z):
-        if self.position.z - z < 0:
+        if z < 0:
             return False
+        if z > self.position.z:
+            z = self.position.z
             
         self.position.z -= z
         if self.handler != None:
