@@ -1,4 +1,4 @@
-import sfml as sfml, copy
+import sfml as sf, copy
 
 #================================================================================
 class Map:

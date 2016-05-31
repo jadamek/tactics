@@ -3,7 +3,7 @@ import unittest, random
 
 class TestTiles(unittest.TestCase):
     #--------------------------------------------------------------------------------
-    def test_00_tile_initialization(self):
+    def test_tile_00_initialization(self):
     #--------------------------------------------------------------------------------
         tile = Tile()
         self.assertEqual(tile.height, 1.0, "Tile height improperly default initialized as: " + str(tile.height) + "; should be 1.0.")
@@ -15,7 +15,7 @@ class TestTiles(unittest.TestCase):
         self.assertEqual(tile.height, 10.0, "Tile height improperly initialized as: " + str(tile.height) + "; should be 10")
         
     #--------------------------------------------------------------------------------
-    def test_01_raise_tile(self):
+    def test_tile_01_raise(self):
     #--------------------------------------------------------------------------------
         tile1 = Tile()
         tile2 = Tile()
@@ -55,7 +55,7 @@ class TestTiles(unittest.TestCase):
         self.assertEqual(tile3.position.z, level1 + level2 + level3, "Rose Tile3 from " + str(level1 + level2) + " => " + str(level1 + level2 + level3) + ", but currently lies at: " + str(tile3.position.z))
 
     #--------------------------------------------------------------------------------
-    def test_02_lower_tile(self):
+    def test_tile_02_lower(self):
     #--------------------------------------------------------------------------------
         tile1 = Tile()
         tile2 = Tile()

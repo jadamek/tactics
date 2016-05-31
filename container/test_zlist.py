@@ -30,14 +30,14 @@ class TestZList(unittest.TestCase):
         self.zlist.clear()
         
     #--------------------------------------------------------------------------------
-    def test_00_zlist_list_initialization(self):
+    def test_zlist_00_list_initialization(self):
     #--------------------------------------------------------------------------------        
         self.assertEqual(self.zlist.head.target, "head", "List initialized without a 'head' pseudo-node.")
         self.assertEqual(self.zlist.front(), None, "List initialized with a real front node.")
         self.assertTrue(self.zlist.empty(), "List initialized with no head node, but list is not empty.")
         
     #--------------------------------------------------------------------------------
-    def test_01_zlist_zobject_initial_addition(self):
+    def test_zlist_01_zobject_initial_addition(self):
     #--------------------------------------------------------------------------------
         zobj = DummyObject()
         self.assertEqual(zobj.id, 1, "Failed to create a dummy z-object with ID 1.")
@@ -52,7 +52,7 @@ class TestZList(unittest.TestCase):
         self.assertEqual(self.zlist.front().next, None, "Added object to empty list, but front node has a right neighbor.")        
 
     #--------------------------------------------------------------------------------
-    def test_02_zlist_zobject_compound_addition(self):
+    def test_zlist_02_zobject_compound_addition(self):
     #--------------------------------------------------------------------------------
         zobj1 = DummyObject()
         zobj2 = DummyObject()
@@ -88,7 +88,7 @@ class TestZList(unittest.TestCase):
             currentID += 1
             
     #--------------------------------------------------------------------------------
-    def test_03_zlist_clear(self):
+    def test_zlist_03_clear(self):
     #--------------------------------------------------------------------------------
         zobj1 = DummyObject()
         zobj2 = DummyObject()
@@ -107,7 +107,7 @@ class TestZList(unittest.TestCase):
         self.assertTrue(self.zlist.empty(), "Cleared list, but list is not empty.")
         
     #--------------------------------------------------------------------------------
-    def test_04_zlist_sorts_properly_on_insert(self):
+    def test_zlist_04_sorts_properly_on_insert(self):
     #--------------------------------------------------------------------------------
         # Randomly generate 100 nodes with random IDs to populate the list
         for i in range(100):
@@ -133,7 +133,7 @@ class TestZList(unittest.TestCase):
         self.assertEqual(count, 100, "List should contain 100 elements, but contains " + str(count) + " instead.")
         
     #--------------------------------------------------------------------------------
-    def test_05_zlist_update_indexing(self):
+    def test_zlist_05_update_indexing(self):
     #--------------------------------------------------------------------------------
         # Randomly generate 10 nodes with random IDs (1~100) to populate the list
         for i in range(10):
@@ -187,7 +187,7 @@ class TestZList(unittest.TestCase):
     zlist = None
     
     #--------------------------------------------------------------------------------
-    def test_05_zlist_zobject_ordering(self):
+    def test_zlist_06_zobject_ordering(self):
     #--------------------------------------------------------------------------------
         obj1 = ZObject()
         obj2 = ZObject()
