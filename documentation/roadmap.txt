@@ -1,14 +1,38 @@
--   View Map
-        ZList       X
-            ZObject X
-            ZNode   X
-        Tilemap
-        Tile        X
--   +Cursor
-        Movable(smooth)
-        ExView
-            Scroll
--   +Menus (keyed)
--   +Objects
-    - Movable/Controllable
-    - Animated
+Roadmap-
+
+-	Viewable Map
+		Tilemap
+			Draw
+		Tile
+			x,y,z
+			height
+			image
+			Draw
+		SpriteTile
+			height
+			Draw		
+-	+ Objects
+-	+ Moving Objects/Controllable Object
+		Cursor		
+			SpriteCursor
+			Cursor:Move(smooth?)
+		ExView
+			Scroll
+-	+ Menus (By Key)
+-	+ Animated Objects
+
+Product Backlog
+	- MapCursor vs. Main Cursor (a hand)
+	- ExView - the rest
+	- Animations
+	- Skills
+	- Statuses
+		* Weather
+		* Buffs
+		* Debuffs
+	- Classes
+	- Factions
+		* Win/Loss
+	- Items
+		* Bonuses (Status?)
+		* Inventory

@@ -155,7 +155,7 @@ class TestZList(unittest.TestCase):
         if node.next != None:
             self.assertTrue(node.target.id <= node.next.target.id, "Node<" + str(node.target.id) + "> not <= Node<" + str(node.next.target.id) + ">")
         
-        # Perturb to lower than the lower possible node in the list.
+        # Perturb to lower than the lowest possible node in the list.
         discontent.id -= 100
         
         # Should not be sorted *yet*

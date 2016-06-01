@@ -30,7 +30,7 @@ class Map:
     def at(self, x, y, z = None):
         if x < 0 or x >= self.width or y < 0 or y >= self.length:
             return False
-        elif not self._tiles[y][x]:
+        elif not self.tiles_[y][x]:
             return False
             
         if z == None:
