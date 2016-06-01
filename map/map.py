@@ -82,19 +82,17 @@ class Map:
     def insert(self, tile, x, y, layer):
         if x < 0 or x >= self.width or y < 0 or y >= self.length:
             return False
-        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+        elif not self.tiles_[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
             return False
         
         z = 0
         
         if layer > 0:
             z = self.tiles_[y][x][layer - 1].position.z + self.tiles_[y][x][layer - 1].height
-            tile.occupant = self.tiles_[y][x][layer - 1].occupant
             self.tiles_[y][x][layer - 1].occupant = tile
-            
-            if tile.occupant != None:
-                tile.occupant.rise(tile.height)
-            
+                        
+        tile.occupant = self.tiles_[y][x][layer]
+        tile.occupant.rise(tile.height)
         tile.position = sf.Vector3(x, y, z)
         self.tiles_[y][x].insert(layer, tile)                
 
@@ -111,7 +109,7 @@ class Map:
     def replace(self, tile, x, y, layer):
         if x < 0 or x >= self.width or y < 0 or y >= self.length:
             return False
-        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+        elif not self.tiles_[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
             return False
                 
         if layer > 0:            
@@ -125,7 +123,7 @@ class Map:
             if difference > 0:
                 tile.occupant.rise(difference)
             elif difference < 0:
-                tile.occupant.lower(difference)
+                tile.occupant.lower(difference * -1)
             
         tile.position = copy.copy(self.tiles_[y][x][layer].position)
         self.tiles_[y][x][layer] = tile
@@ -142,7 +140,7 @@ class Map:
     def remove(self, x, y, layer):
         if x < 0 or x >= self.width or y < 0 or y >= self.length:
             return False
-        elif not self._tiles[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
+        elif not self.tiles_[y][x] or layer < 0 or layer >= len(self.tiles_[y][x]):
             return False
                 
         if layer > 0:            

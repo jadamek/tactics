@@ -107,6 +107,7 @@ class TestMap(unittest.TestCase):
             for iy in range(map.length):
                 self.assertFalse(map.at(ix, iy), "Position [" + str(ix) + ", " + str(iy) + "] in unfilled map should be an empty array and thus return False")
                 
+        # Setup map of three stacked tiles 
         tile1 = Tile(None, 5)
         tile2 = Tile(None, 3)
         tile3 = Tile(None, 2)
@@ -126,7 +127,114 @@ class TestMap(unittest.TestCase):
         for z in range(9, 11):
             self.assertEqual(map.at(x, y, z), tile3, "Z-level of " + str(z) + " is within 9-10, and should return floor Tile3")
             
-            
-            
+    #--------------------------------------------------------------------------------
+    def test_map_04_insert_tile(self):
+    #--------------------------------------------------------------------------------
+        map = Map(2, 2)
+        x = 1
+        y = 1
+        
+        tile = Tile(None, 10)
+                       
+        # Inserting tiles out of bounds
+        self.assertFalse(map.insert(tile, -1, 0, 0), "Inserting tile at (-1, 0, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.insert(tile, 2, 0, 0), "Inserting tile at (2, 0, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.insert(tile, 0, -1, 0), "Inserting tile at (0, -1, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.insert(tile, 0, 2, 0), "Inserting tile at (0, 2, 0) is out of bounds for 2x2 map, and should return False")
+
+        for ix in range(map.width):
+            for iy in range(map.length):
+                self.assertFalse(map.insert(tile, ix, iy, 0), "Position [" + str(ix) + ", " + str(iy) + "] in unfilled map should be an empty array and thus return False")
+                            
+        # Setup map of three stacked tiles 
+        tile1 = Tile(None, 5)
+        tile2 = Tile(None, 3)
+        tile3 = Tile(None, 2)
+        
+        map.place(tile1, x, y)
+        map.place(tile2, x, y)
+        map.place(tile3, x, y)
+        
+        self.assertFalse(map.insert(tile, x, y, -1), "Inserting tile at (" + str(ix) + ", " + str(iy) + ", -1) is out of bounds for 2x2x3 column, and should return False")
+        self.assertFalse(map.insert(tile, x, y, 3), "Inserting tile at (" + str(ix) + ", " + str(iy) + ", 3) is out of bounds for 2x2x3 column, and should return False")
+        
+        # Insert on bottom
+        tile4 = Tile(None, 8)
+        map.insert(tile4, x, y, 0)
+        
+        self.assertEqual(len(map.tiles_[y][x]), 4, "Inserted tile under 3-tile stack at (" + str(ix) + ", " + str(iy) + "), but stack is " + str(len(map.tiles_[y][x])) + " tiles long, not 4")
+        self.assertEqual(map.tiles_[y][x][0], tile4, "Inserted tile at layer 0, but found " + str(map.tiles_[y][x][0]) + " there instead")
+        self.assertEqual(tile4.occupant, tile1, "Inserted Tile4 under Tile1, but Tile4's occupant is not Tile1")
+        self.assertEqual(tile3.position.z, 16, "Inserted Tile4 at bottom of stack, but top tile did not rise by " + str(tile4.height) + ", and is at " + str(tile3.position.z) + " instead")
+        
+        tile5 = Tile(None, 10)
+        
+        # Insert Tile5 under Tile2 and Tile3, and above Tile4 and Tile1
+        map.insert(tile5, x, y, 2)
+        
+        self.assertEqual(len(map.tiles_[y][x]), 5, "Inserted tile into 4-tile stack at (" + str(ix) + ", " + str(iy) + "), but stack is " + str(len(map.tiles_[y][x])) + " tiles long, not 5")
+        self.assertEqual(map.tiles_[y][x][2], tile5, "Inserted tile at layer 2, but found " + str(map.tiles_[y][x][2]) + " there instead")
+        self.assertEqual(tile5.occupant, tile2, "Inserted Tile5 under Tile2, but Tile5's occupant is not Tile2")
+        self.assertEqual(tile1.occupant, tile5, "Inserted Tile5 above Tile1, but Tile1's occupant is not Tile5")
+        self.assertEqual(tile3.position.z, 26, "Inserted Tile5 at bottom of stack, but top tile did not rise by " + str(tile.height) + ", and is at " + str(tile3.position.z) + " instead")
+        
+    #--------------------------------------------------------------------------------
+    def test_map_05_replace_tile(self):
+    #--------------------------------------------------------------------------------
+        map = Map(2, 2)
+        x = 1
+        y = 1
+        
+        tile = Tile(None, 10)
+                       
+        # Replacing tiles out of bounds
+        self.assertFalse(map.replace(tile, -1, 0, 0), "Replacing tile at (-1, 0, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.replace(tile, 2, 0, 0), "Replacing tile at (2, 0, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.replace(tile, 0, -1, 0), "Replacing tile at (0, -1, 0) is out of bounds for 2x2 map, and should return False")
+        self.assertFalse(map.replace(tile, 0, 2, 0), "Replacing tile at (0, 2, 0) is out of bounds for 2x2 map, and should return False")
+
+        for ix in range(map.width):
+            for iy in range(map.length):
+                self.assertFalse(map.replace(tile, ix, iy, 0), "Position [" + str(ix) + ", " + str(iy) + "] in unfilled map should be an empty array and thus return False")
+                            
+        # Setup map of three stacked tiles 
+        tile1 = Tile(None, 5)
+        tile2 = Tile(None, 3)
+        tile3 = Tile(None, 2)
+        
+        map.place(tile1, x, y)
+        map.place(tile2, x, y)
+        map.place(tile3, x, y)
+        
+        self.assertFalse(map.replace(tile, x, y, -1), "Replacing tile at (" + str(ix) + ", " + str(iy) + ", -1) is out of bounds for 2x2x3 column, and should return False")
+        self.assertFalse(map.replace(tile, x, y, 3), "Replacing tile at (" + str(ix) + ", " + str(iy) + ", 3) is out of bounds for 2x2x3 column, and should return False")
+               
+        tile5 = Tile(None, 1)
+        
+        # Replace middle tile (Tile2)
+        map.replace(tile5, x, y, 1)
+        
+        self.assertEqual(len(map.tiles_[y][x]), 3, "Replaced Tile2 with Tile5, but stack at (" + str(ix) + ", " + str(iy) + ") is " + str(len(map.tiles_[y][x])) + " tiles long, not 3")
+        self.assertEqual(map.tiles_[y][x][1], tile5, "Replaced Tile2 with Tile5, but found " + str(map.tiles_[y][x][1]) + " in its place instead")
+        self.assertNotIn(tile2, map.tiles_[y][x], "Replaced Tile2 with Tile5, but Tile2 still found in stack")
+        self.assertEqual(tile5.occupant, tile3, "Replaced Tile5 with Tile5, but Tile5's occupant is not Tile3")
+        self.assertEqual(tile1.occupant, tile5, "Replaced Tile5 above Tile2, but Tile1's occupant is not Tile5")
+        self.assertEqual(tile3.position.z, 6, "Replaced Tile2 of height " + str(tile2.height) + " with Tile5 of height " + str(tile5.height) + ", but top tile did not lower by " + str(tile2.height - tile5.height) + ", and is at " + str(tile3.position.z) + " instead")                
+
+        # Replace bottom tile (Tile1)
+        tile4 = Tile(None, 8)
+        map.replace(tile4, x, y, 0)
+        
+        self.assertEqual(len(map.tiles_[y][x]), 3, "Replaced Tile1 with Tile4, but stack at (" + str(ix) + ", " + str(iy) + ") is " + str(len(map.tiles_[y][x])) + " tiles long, not 3")
+        self.assertEqual(map.tiles_[y][x][0], tile4, "Replaced Tile1 with Tile4, but found " + str(map.tiles_[y][x][0]) + " in its place instead")
+        self.assertNotIn(tile1, map.tiles_[y][x], "Replaced Tile1 with Tile4, but Tile1 still found in stack")
+        self.assertEqual(tile4.occupant, tile5, "Replaced Tile1 with Tile4, but Tile4's occupant is not Tile5")
+        self.assertEqual(tile3.position.z, 9, "Replaced Tile1 of height " + str(tile1.height) + " with Tile4 of height " + str(tile4.height) + ", but top tile did not rise by " + str(tile4.height - tile1.height) + ", and is at " + str(tile3.position.z) + " instead")
+
+    #--------------------------------------------------------------------------------
+    def test_map_06_remove_tile(self):
+    #--------------------------------------------------------------------------------
+    
+        
 if __name__ == "__main__":
     unittest.main(verbosity = 2)

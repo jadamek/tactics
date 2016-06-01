@@ -3,9 +3,9 @@
 -	Viewable Map
 		Tilemap				
 			Draw
-			at			X
+			at			X	X
 			place		X	X
-			insert		X
+			insert		X	X
 			replace		X
 			remove		X
 			
