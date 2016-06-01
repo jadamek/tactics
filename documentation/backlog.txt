@@ -1,17 +1,17 @@
 		Item			St	Test
 								
 -	Viewable Map
-		Tilemap				
+		Tilemap				X
 			Draw
 			at			X	X
 			place		X	X
 			insert		X	X
-			replace		X
-			remove		X
+			replace		X	X
+			remove		X	X
 			
-		Tile			X	X	
-			x,y,z		
-			height			
+		Tile				X	
+			x,y,z		X	X
+			height		X	X
 			image
 			Draw
 		SpriteTile
