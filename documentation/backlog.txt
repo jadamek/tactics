@@ -14,9 +14,9 @@
 			height		X	X
 			image
 			Draw
-		SpriteTile
-			height
-			Draw	
+		SpriteTile		X
+			height		X
+			Draw		X
 		ZList			X	X
 			ZNode		X	X
 			ZObject		X	X
