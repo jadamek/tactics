@@ -5,7 +5,7 @@ window = sf.RenderWindow(sf.VideoMode(640, 480), 'Tactics!')
 window.framerate_limit = 60
 
 tile_texture = sf.Texture.from_file('resources/graphics/GrassTile.png')
-tile = SpriteTile(tile_texture)
+tile = SpriteTile(tile_texture, 32, 24, 8, True)
 tile.move(sf.Vector2(100, 100))
 #tile.rotate(30)
 tile.reset_height(8)

@@ -23,9 +23,9 @@ class SpriteTile(sf.TransformableDrawable):
         self.height = height
         self.continuous = continous
 
-        if width <= 0:
+        if width <= 0 or width > texture.width / 2:
             self.width = texture.width / 2        
-        if length <= 0:
+        if length <= 0 or length > texture.height / 2:
             self.length = texture.height / 2
         if height < 0:
             self.height = 0
