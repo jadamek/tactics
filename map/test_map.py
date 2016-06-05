@@ -277,5 +277,68 @@ class TestMap(unittest.TestCase):
         self.assertEqual(tile1.occupant, tile3, "Removed Tile2, but Tile1's occupant is " + str(tile3.occupant) + ", not Tile3")
         self.assertEqual(tile3.position.z, 5, "Removed Tile2 of height " + str(tile2.height) + " but top tile did not fall by that amount and is at " + str(tile3.position.z) + " instead")
 
+    #--------------------------------------------------------------------------------
+    def test_map_07_unit_scale(self):
+    #--------------------------------------------------------------------------------
+        # Default scale
+        map = Map(2, 2)
+        
+        self.assertEqual(map.scale_.x, 32, "Default map's width scaling should be 32px/unit, but is " + str(map.scale_.x))
+        self.assertEqual(map.scale_.y, 24, "Default map's length scaling should be 24px/unit, but is " + str(map.scale_.y))
+        self.assertEqual(map.scale_.z, 8, "Default map's height scaling should be 8px/unit, but is " + str(map.scale_.z))
+        
+        # Scale specified out of bounds
+        map = Map(2, 2, sf.Vector3(0, 0, 0))
+        
+        self.assertEqual(map.scale_.x, 1, "Out of bound width scale (< 1) width scaling should be 1px/unit, but is " + str(map.scale_.x))
+        self.assertEqual(map.scale_.y, 1, "Out of bound length scale (< 1) length scaling should be 1px/unit, but is " + str(map.scale_.y))
+        self.assertEqual(map.scale_.z, 1, "Out of bound height scale (< 1) scaling should be 1px/unit, but is " + str(map.scale_.z))
+        
+        # In bound scale
+        scale = sf.Vector3(random.randint(1, 100), random.randint(1, 100), random.randint(1, 100))
+
+        map = Map(2, 2, scale)
+        self.assertEqual(map.scale_.x, scale.x, "Map constructed with scaling vector " + str(scale) + " should have a width scaling of " + str(scale.x) + "px/unit, but is " + str(map.scale_.x))
+        self.assertEqual(map.scale_.y, scale.y, "Map constructed with scaling vector " + str(scale) + " should have a length scaling of " + str(scale.y) + "px/unit, but is " + str(map.scale_.y))
+        self.assertEqual(map.scale_.z, scale.z, "Map constructed with scaling vector " + str(scale) + " should have a height scaling of " + str(scale.z) + "px/unit, but is " + str(map.scale_.y))
+
+        # Setting scale to out of bounds
+        map.set_unit_scale(sf.Vector3(0, 0, 0))
+        
+        self.assertEqual(map.scale_.x, 1, "Setting scale out of bounds (< 1) width scaling should be 1px/unit, but is " + str(map.scale_.x))
+        self.assertEqual(map.scale_.y, 1, "Setting scale out of bounds(< 1) length scaling should be 1px/unit, but is " + str(map.scale_.y))
+        self.assertEqual(map.scale_.z, 1, "Setting scale out of bounds (< 1) scaling should be 1px/unit, but is " + str(map.scale_.z))
+    #--------------------------------------------------------------------------------
+    def test_map_08_isometric_transforming(self):
+    #--------------------------------------------------------------------------------
+        for i in range(10):
+            scale = sf.Vector3(random.randint(1, 100), random.randint(1, 100), random.randint(1, 100))
+        
+            map = Map(1, 1, scale)
+            
+            for i in range(100):
+                p1 = sf.Vector3(random.randint(1, 100), random.randint(1, 100), random.randint(1, 100))                
+                p1x = map.get_isometric_transform(p1).transform_point(sf.Vector2(0, 0))
+
+                # Randomly shift X
+                p2 = sf.Vector3(random.randint(1, 100), p1.y, p1.z)
+                p2x = map.get_isometric_transform(p2).transform_point(sf.Vector2(0, 0))
+
+                self.assertEqual(p2x.x - p1x.x, 0.5 * map.scale_.x * (p2.x - p1.x), "Isometric shift in x when shifting x from " + str(p1.x) + " to " + str(p2.x) + " for a map with scale " + str(map.scale_) + " should be " + str(0.5 * map.scale_.x * (p2.x - p1.x)) + ", not " + str(p2x.x - p1x.x))
+                self.assertEqual(p2x.y - p1x.y, 0.5 * map.scale_.y * (p2.x - p1.x), "Isometric shift in y when shifting x from " + str(p1.x) + " to " + str(p2.x) + " for a map with scale " + str(map.scale_) + " should be " + str(0.5 * map.scale_.y * (p2.x - p1.x)) + ", not " + str(p2x.y - p1x.y))
+
+                # Randomly shift Y
+                p2 = sf.Vector3(p1.x, random.randint(1, 100), p1.z)
+                p2x = map.get_isometric_transform(p2).transform_point(sf.Vector2(0, 0))
+
+                self.assertEqual(p2x.x - p1x.x, -0.5 * map.scale_.x * (p2.y - p1.y), "Isometric shift in x when shifting y from " + str(p1.y) + " to " + str(p2.y) + " for a map with scale " + str(map.scale_) + " should be " + str(-0.5 * map.scale_.x * (p2.y - p1.y)) + ", not " + str(p2x.x - p1x.x))
+                self.assertEqual(p2x.y - p1x.y, 0.5 * map.scale_.y * (p2.y - p1.y), "Isometric shift in y when shifting y from " + str(p1.y) + " to " + str(p2.y) + " for a map with scale " + str(map.scale_) + " should be " + str(0.5 * map.scale_.y * (p2.y - p1.y)) + ", not " + str(p2x.y - p1x.y))
+
+                # Randomly shift Z
+                p2 = sf.Vector3(p1.x, p1.y, random.randint(1, 100))
+                p2x = map.get_isometric_transform(p2).transform_point(sf.Vector2(0, 0))
+
+                self.assertEqual(p1x.y - p2x.y, map.scale_.z * (p2.z - p1.z), "Isometric shift in y when shifting z from " + str(p1.z) + " to " + str(p2.z) + " for a map with scale " + str(map.scale_) + " should be " + str(map.scale_.z * (p2.z - p1.z)) + ", not " + str(p1x.y - p2x.y))
+
 if __name__ == "__main__":
     unittest.main(verbosity = 2)

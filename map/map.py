@@ -1,7 +1,9 @@
-import sfml as sf, copy
+import sfml as sf, copy, sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../container")
+from zlist import ZList
 
 #================================================================================
-class Map:
+class Map(sf.TransformableDrawable):
 #================================================================================
 # Represents an isometric tilemap, which consists of a 2-D jagged array of 3-D
 # isometric tile blocks.
@@ -11,15 +13,34 @@ class Map:
     # - Tilemap Constructor
     #----------------------------------------------------------------------------
     # * width : width of the map (x-axis) in tiles
-    # * length : length of the map (y-axis) in tiles    
+    # * length : length of the map (y-axis) in tiles
+    # * scale : unit scale vector which describes pixels per unit distance for
+    #       width (x), length (y) and height (z)
     #----------------------------------------------------------------------------
-    def __init__(self, width = 10, length = 10):
+    def __init__(self, width = 10, length = 10, scale = sf.Vector3(32, 24, 8)):
+        sf.Drawable.__init__(self)
+        
+        # Sanitization
         if int(width) < 1 : width = 1
         if int(length) < 1 : length = 1
+        ux = scale.x
+        uy = scale.y
+        uz = scale.z
+        if ux < 1: ux = 1
+        if uy < 1: uy = 1
+        if uz < 1: uz = 1
+        
         self.width = width
         self.length = length
-        self.tiles_ = [[[]] * width] * length
         
+        self.tiles_ = []
+        for y in range(self.length):
+            self.tiles_.append([])
+            for x in range(self.width):
+                self.tiles_[y].append([])
+                
+        self.images_ = ZList()
+        self.scale_ = sf.Vector3(ux, uy, uz)
     #----------------------------------------------------------------------------
     # - Get Tile At
     #----------------------------------------------------------------------------
@@ -56,7 +77,7 @@ class Map:
             return False
                     
         z = 0
-        
+
         # Place on the exact top of the highest tile at (x, y)
         if self.tiles_[y][x]:
             z = self.tiles_[y][x][-1].position.z + self.tiles_[y][x][-1].height
@@ -67,7 +88,9 @@ class Map:
                 tile.occupant.rise(tile.height)
             
         tile.position = sf.Vector3(x, y, z)
-        self.tiles_[y][x].append(tile)                
+        
+        self.tiles_[y][x].append(tile)
+        self.images_.add(tile)
 
         return True
         
@@ -94,7 +117,9 @@ class Map:
         tile.occupant = self.tiles_[y][x][layer]
         tile.occupant.rise(tile.height)
         tile.position = sf.Vector3(x, y, z)
-        self.tiles_[y][x].insert(layer, tile)                
+        
+        self.tiles_[y][x].insert(layer, tile)
+        self.images_.add(tile)           
 
         return True
         
@@ -126,7 +151,9 @@ class Map:
                 tile.occupant.lower(difference * -1)
             
         tile.position = copy.copy(self.tiles_[y][x][layer].position)
+        
         self.tiles_[y][x][layer] = tile
+        self.images_.add(tile)
 
         return True
         
@@ -153,7 +180,58 @@ class Map:
         
         return True                   
 
+    #----------------------------------------------------------------------------
+    # - Set Unit Scale
+    #----------------------------------------------------------------------------
+    # * scale : unit scale vector which describes pixels per unit distance for
+    #       width (x), length (y) and height (z)
+    #----------------------------------------------------------------------------
+    def set_unit_scale(self, scale):
+        ux = scale.x
+        uy = scale.y
+        uz = scale.z
+        if ux < 1: ux = 1
+        if uy < 1: uy = 1
+        if uz < 1: uz = 1
+        
+        self.scale_ = sf.Vector3(ux, uy, uz)
+
+    #----------------------------------------------------------------------------
+    # Get Isometric Transform
+    #----------------------------------------------------------------------------
+    # * local : 3-D position in local coordinate system, which is used to compute
+    #       the 2-D isometric transform for graphic coordinates.
+    #----------------------------------------------------------------------------
+    def get_isometric_transform(self, local):
+        transform = sf.Transform()
+        
+        # Update with the map's transform
+        transform.combine(self.transform)
+        
+        #Translate to isometric coordinates        
+        x = 0.5 * self.scale_.x * (local.x - local.y);
+        y = 0.5 * self.scale_.y * (local.x + local.y) - self.scale_.z * local.z;	    
+        
+        transform.translate(sf.Vector2(x, y))
+        
+        return transform
+
+    #----------------------------------------------------------------------------
+    # - Draw (Overload)
+    #----------------------------------------------------------------------------
+    def draw(self, target, states):        
+        image = self.images_.front()
+        
+        while(image is not None):
+            local_states = sf.RenderStates(states.blend_mode, states.transform * self.get_isometric_transform(image.target.position), states.texture, states.shader)
+            target.draw(image.target.sprite, local_states)
+            image = image.next
+        
 # Members    
     tiles_ = []
     width = 0
     length = 0
+    images_ = None
+    scale_ = None
+#================================================================================
+    

@@ -1,22 +1,22 @@
 		Item			St	Test
 								
 -	Viewable Map
-		Tilemap				X
-			Draw
+		Tilemap			X	X
+			Draw		X	X
 			at			X	X
 			place		X	X
 			insert		X	X
 			replace		X	X
 			remove		X	X
 			
-		Tile				X	
+		Tile			X	X	
 			x,y,z		X	X
 			height		X	X
-			image
-			Draw
-		SpriteTile		X
-			height		X
-			Draw		X
+			image		X	X
+			Draw		X	X
+		SpriteTile		X	X
+			height		X	X
+			Draw		X	X
 		ZList			X	X
 			ZNode		X	X
 			ZObject		X	X

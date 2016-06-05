@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../container")
 
-from zlist import *
+from zlist import ZObject
 import sfml as sf
 
 #================================================================================

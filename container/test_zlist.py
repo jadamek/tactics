@@ -209,6 +209,7 @@ class TestZList(unittest.TestCase):
         self.assertGreater(obj1, obj2, "Object with position <" + str(obj1.position) + "> was not found greater than <" + str(obj2.position) + ">")        
         obj2.position.x += 80
         self.assertGreater(obj2, obj1, "Object with position <" + str(obj2.position) + "> was not found greater than <" + str(obj1.position) + ">")
-                
+#================================================================================
+ 
 if __name__ == "__main__":
     unittest.main(verbosity = 2)
