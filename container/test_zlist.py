@@ -192,12 +192,12 @@ class TestZList(unittest.TestCase):
         obj1 = ZObject()
         obj2 = ZObject()
         
-        # Equivalent points are reflexive
         obj1.position.x = random.randint(-100, 100)
         obj1.position.y = random.randint(-100, 100)
         obj1.position.z = random.randint(-100, 100)
-        obj2.position = copy.copy(obj1.position)
-        
+
+        # Equivalent points are reflexive
+        obj2.position = copy.copy(obj1.position)        
         self.assertEqual(obj1 < obj2, obj1 > obj2, "Objects with positions <" + str(obj1.position) + "> and <" + str(obj2.position) + "> were not found to reflexively compare.")
         
         # Higher z is higher priority

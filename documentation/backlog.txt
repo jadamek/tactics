@@ -1,22 +1,36 @@
-		Item			St	Test
-								
--	Viewable Map
-		Tilemap			X	X
-			Draw		X	X
-			at			X	X
-			place		X	X
-			insert		X	X
-			replace		X	X
-			remove		X	X
-			
-		Tile			X	X	
-			x,y,z		X	X
-			height		X	X
-			image		X	X
-			Draw		X	X
-		SpriteTile		X	X
-			height		X	X
-			Draw		X	X
-		ZList			X	X
-			ZNode		X	X
-			ZObject		X	X
+		Item				St	Test
+-	Variable Height
+		Map
+			height()
+		Tile
+			height()
+			max_height()
+-	Moving Objects
+		MobileObject
+			moveTo()
+			moveAlong()
+		Animation
+			play()
+			stop()
+			paused
+			frozen
+			loop
+			update()
+			__inc__()
+			__dec__	()		
+		SpriteSheet
+			index
+			limit()
+			play()
+			update_frame()
+			__inc__()
+			__dec__()
+		SpriteDirected
+			limit()
+			update_frame()
+			direction
+			directions
+		SpriteCharacter
+			play()
+			__inc__()
+			__dec__()

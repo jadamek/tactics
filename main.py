@@ -8,9 +8,9 @@ grass_texture = sf.Texture.from_file('resources/graphics/GrassTile.png')
 
 map = Map(10, 10)
 
-# Dirt layer
 for x in range(map.width):
     for y in range(map.length):
+        # Dirt layer
         height = random.randint(3, 5) / 2.0
 
         tile_sprite = SpriteTile(dirt_texture, map.scale_.x, map.scale_.y, map.scale_.z * height)
@@ -18,15 +18,13 @@ for x in range(map.width):
                 
         map.place(tile, x, y)
 
-# Grass layer        
-for x in range(map.width):
-    for y in range(map.length):
+        # Grass layer        
         height = random.randint(1, 2) / 2.0
 
         tile_sprite = SpriteTile(grass_texture, map.scale_.x, map.scale_.y, map.scale_.z * height)
         tile = Tile(tile_sprite, height)
-                
-        map.place(tile, x, y)        
+
+        map.place(tile, x, y)                        
         
 target = sf.Texture.from_file('resources/graphics/Target.png')
 cursor = sf.Sprite(target)
