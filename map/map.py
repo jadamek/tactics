@@ -219,16 +219,17 @@ class Map(sf.TransformableDrawable):
     #----------------------------------------------------------------------------
     # Get Height
     #----------------------------------------------------------------------------
-    # * position : Grid (x, y) position by which to query the map height.
+    # * x : x-coordinate of position by which to query the map height.
+    # * y : y-coordinate of position by which to query the map height.
     #----------------------------------------------------------------------------
-    def height(self, position):
-        x = int(round(position.x))
-        y = int(round(position.y))
+    def height(self, x, y):
+        x_i = int(round(x))
+        y_i = int(round(y))
 
-        tile = self.at(x, y)
+        tile = self.at(x_i, y_i)
 
-        if tile: return tile.get_height(sf.Vector2(position.x - x, position.y - y))
-        else: return False
+        if tile: return tile.get_height(sf.Vector2(x - x_i, y - y_i))
+        else: return None
 
     #----------------------------------------------------------------------------
     # - Draw (Overload)

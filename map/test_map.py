@@ -356,20 +356,20 @@ class TestMap(unittest.TestCase):
         map.place(tile3, 1, 1)
 
         # Out of bound coordinates should return False
-        self.assertFalse(map.height(sf.Vector2(-0.5, 0)), "Out-bound position " + str(sf.Vector2(-0.5, 0)) + " returned " + str(map.height(sf.Vector2(-0.5, 0))) + ", not False")
-        self.assertFalse(map.height(sf.Vector2(1.5, 0)), "Out-bound position " + str(sf.Vector2(1.5, 0)) + " returned " + str(map.height(sf.Vector2(1.5, 0))) + ", not False")
-        self.assertFalse(map.height(sf.Vector2(0, -0.5)), "Out-bound position " + str(sf.Vector2(0, -0.5)) + " returned " + str(map.height(sf.Vector2(0, -0.5))) + ", not False")
-        self.assertFalse(map.height(sf.Vector2(0, 1.5)), "Out-bound position " + str(sf.Vector2(0, 1.5)) + " returned " + str(map.height(sf.Vector2(0, 1.5))) + ", not False")
+        self.assertEqual(map.height(-0.5, 0), None, "Out-bound position " + str(sf.Vector2(-0.5, 0)) + " returned " + str(map.height(-0.5, 0)) + ", not None")
+        self.assertEqual(map.height(1.5, 0), None, "Out-bound position " + str(sf.Vector2(1.5, 0)) + " returned " + str(map.height(1.5, 0)) + ", not None")
+        self.assertEqual(map.height(0, -0.5), None, "Out-bound position " + str(sf.Vector2(0, -0.5)) + " returned " + str(map.height(0, -0.5)) + ", not None")
+        self.assertEqual(map.height(0, 1.5), None, "Out-bound position " + str(sf.Vector2(0, 1.5)) + " returned " + str(map.height(0, 1.5)) + ", not None")
 
         for dx in arange(-0.4, 0.5, 0.1):
             for dy in arange(-0.4, 0.5, 0.1):
                 # Coordinate of a blank tile space should return False
-                self.assertFalse(map.height(sf.Vector2(1 + dx, 0 + dy)), "Blank region " + str(sf.Vector2(1 + dx, 0 + dy)) + " returned " + str(map.height(sf.Vector2(1 + dx, 0 + dy))) + ", not False")
+                self.assertEqual(map.height(1 + dx, 0 + dy), None, "Blank region " + str(sf.Vector2(1 + dx, 0 + dy)) + " returned " + str(map.height(1 + dx, 0 + dy)) + ", not None")
 
                 # In-bound coordinate of a filled tile space should return the tile of that space
-                self.assertEqual(map.height(sf.Vector2(0 + dx, 0 + dy)), 5, "Position " + str(sf.Vector2(0 + dx, 0 + dy)) + " returned " + str(map.height(sf.Vector2(0 + dx, 0 + dy))) + ", not 5")
-                self.assertEqual(map.height(sf.Vector2(0 + dx, 1 + dy)), 3, "Position " + str(sf.Vector2(0 + dx, 1 + dy)) + " returned " + str(map.height(sf.Vector2(0 + dx, 1 + dy))) + ", not 3")
-                self.assertEqual(map.height(sf.Vector2(1 + dx, 1 + dy)), 10, "Position " + str(sf.Vector2(1 + dx, 1 + dy)) + " returned " + str(map.height(sf.Vector2(1 + dx, 1 + dy))) + ", not 10")
+                self.assertEqual(map.height(0 + dx, 0 + dy), 5, "Position " + str(sf.Vector2(0 + dx, 0 + dy)) + " returned " + str(map.height(0 + dx, 0 + dy)) + ", not 5")
+                self.assertEqual(map.height(0 + dx, 1 + dy), 3, "Position " + str(sf.Vector2(0 + dx, 1 + dy)) + " returned " + str(map.height(0 + dx, 1 + dy)) + ", not 3")
+                self.assertEqual(map.height(1 + dx, 1 + dy), 10, "Position " + str(sf.Vector2(1 + dx, 1 + dy)) + " returned " + str(map.height(1 + dx, 1 + dy)) + ", not 10")
                 
 if __name__ == "__main__":
     unittest.main(verbosity = 2)

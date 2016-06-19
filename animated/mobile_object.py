@@ -15,11 +15,14 @@ class MobileObject(ZObject):
     #----------------------------------------------------------------------------
     # Mobile Object Constructor
     #----------------------------------------------------------------------------
-    def __init__(self):
+    # * ground : height map which the object's z-coodinate will be bound to
+    #----------------------------------------------------------------------------
+    def __init__(self, ground = None):
         ZObject.__init__(self)
         self.speed = 1
         self.fps = 1
         self.frozen = False
+        self.ground = ground
         self.destination_ = []
         self.clock_ = 0.0
         self.arrival_ = 0
@@ -38,7 +41,7 @@ class MobileObject(ZObject):
     #----------------------------------------------------------------------------
     # * path : a list of consecutive destinations
     #----------------------------------------------------------------------------
-    def moveTo(self, path):
+    def moveAlong(self, path):
         if type(path) is list:
             self.destination_ = path
             self.arrival_ = self.compute_arrival(path[0])
@@ -47,15 +50,20 @@ class MobileObject(ZObject):
     # Increment Frame
     #----------------------------------------------------------------------------
     def step(self):
-        if len(self.destination_) > 0:
-            self.position = self.position + (destination[0] - self.position) / self.arrival_
+        if len(self.destination_) > 0:            
+            x = self.position.x + (self.destination_[0].x - self.position.x) / float(self.arrival_)
+            y = self.position.y + (self.destination_[0].y - self.position.y) / float(self.arrival_)
+            z = self.ground.height(x, y) if self.ground is not None else self.position.z
+            if z is None: z = self.position.z
+
+            self.position = sf.Vector3(x, y, z)
             self.arrival_ -= 1
 
-            if position is self.destination[0]:
+            if sf.Vector2(self.position.x, self.position.y) == self.destination_[0]:
                 self.destination_.pop(0)                    
 
-                if len(self.destination) > 0:
-                    self.arrival_ = self.compute_arrival(destination[0])
+                if len(self.destination_) > 0:
+                    self.arrival_ = self.compute_arrival(self.destination_[0])
 
     #----------------------------------------------------------------------------
     # Update
@@ -65,9 +73,9 @@ class MobileObject(ZObject):
     def update(self, elapsed):
         if not self.frozen:
             self.clock_ += elapsed
-            while self.clock_ > 1.0 / fps:
+            while self.clock_ >= 1.0 / self.fps:
                 self.step()
-                self.clock_ -= 1.0 / fps
+                self.clock_ -= 1.0 / self.fps
 
     #----------------------------------------------------------------------------
     # Compute Arrival (private)
@@ -82,6 +90,7 @@ class MobileObject(ZObject):
     speed = 1
     fps = 1
     frozen = False
+    ground = None
     destination_ = None
     arrival_ = 0
     clock_ = 0

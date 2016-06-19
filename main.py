@@ -2,7 +2,9 @@ import sfml as sf, random
 from sprite.map.sprite_tile import SpriteTile
 from map.map import Map
 from map.tile import Tile
+from animated.mobile_object import MobileObject
        
+
 dirt_texture = sf.Texture.from_file('resources/graphics/Tile.png')
 grass_texture = sf.Texture.from_file('resources/graphics/GrassTile.png')
 
@@ -25,7 +27,7 @@ for x in range(map.width):
         tile = Tile(tile_sprite, height)
 
         map.place(tile, x, y)                        
-        
+"""        
 target = sf.Texture.from_file('resources/graphics/Target.png')
 cursor = sf.Sprite(target)
 cursor.move(sf.Vector2(-8,-8))
@@ -45,3 +47,12 @@ while window.is_open:
     window.draw(map)
     window.draw(cursor)
     window.display()
+"""
+
+obj = MobileObject(map)
+obj.moveAlong([sf.Vector2(6, 4), sf.Vector2(10, 2)])
+print "t0 -> pos:", obj.position, "| dest:", obj.destination_, "| toa:", obj.arrival_
+
+for i in range(14):
+    obj.update(1.0)
+    print "t" + str(i  + 1), "-> pos:", obj.position, "| dest:", obj.destination_, "| toa:", obj.arrival_

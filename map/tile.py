@@ -64,7 +64,7 @@ class Tile(ZObject):
     def get_height(self, position = sf.Vector2()):
         # Must be within a 1.0 x 1.0 space of the center of this tile
         if -0.5 > position.x or position.x > 0.5 or -0.5 > position.y or position.y > 0.5:
-            return False
+            return None
 
         return self.height
 
