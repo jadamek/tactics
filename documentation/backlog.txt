@@ -1,14 +1,15 @@
 		Item				St	Test
--	Variable Height
-		Map
-			height()
+-	Variable Height			X	X
+		Map	
+			height()		X	X
 		Tile
-			height()
-			max_height()
+			height()		X	X
 -	Moving Objects
 		MobileObject
 			moveTo()
 			moveAlong()
+			update()
+			__inc__()
 		Animation
 			play()
 			stop()
