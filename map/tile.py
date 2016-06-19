@@ -57,6 +57,18 @@ class Tile(ZObject):
             self.occupant.lower(z)
 
     #----------------------------------------------------------------------------
+    # - Get Height
+    #----------------------------------------------------------------------------
+    # * position : (x,y) position relative to the center of the tile
+    #----------------------------------------------------------------------------
+    def get_height(self, position = sf.Vector2()):
+        # Must be within a 1.0 x 1.0 space of the center of this tile
+        if -0.5 > position.x or position.x > 0.5 or -0.5 > position.y or position.y > 0.5:
+            return False
+
+        return self.height
+
+    #----------------------------------------------------------------------------
     # - Draw (Overload)
     #----------------------------------------------------------------------------
     def draw(self, target, states):

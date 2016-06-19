@@ -1,6 +1,7 @@
 from map import Map
 from tile import Tile
 import unittest, random, sfml as sf
+from numpy import arange
 
 class TestMap(unittest.TestCase):
     #--------------------------------------------------------------------------------
@@ -165,7 +166,7 @@ class TestMap(unittest.TestCase):
         self.assertEqual(len(map.tiles_[y][x]), 4, "Inserted tile under 3-tile stack at (" + str(ix) + ", " + str(iy) + "), but stack is " + str(len(map.tiles_[y][x])) + " tiles long, not 4")
         self.assertEqual(map.tiles_[y][x][0], tile4, "Inserted tile at layer 0, but found " + str(map.tiles_[y][x][0]) + " there instead")
         self.assertEqual(tile4.occupant, tile1, "Inserted Tile4 under Tile1, but Tile4's occupant is not Tile1")
-        self.assertEqual(tile3.position.z, 16, "Inserted Tile4 at bottom of stack, but top tile did not rise by " + str(tile4.height) + ", and is at " + str(tile3.position.z) + " instead")
+        self.assertEqual(tile3.position.z, 16, "Inserted Tile4 at bottom of stack, but top tile did not rise by " + str(tile4.get_height()) + ", and is at " + str(tile3.position.z) + " instead")
         
         tile5 = Tile(None, 10)
         
@@ -176,7 +177,7 @@ class TestMap(unittest.TestCase):
         self.assertEqual(map.tiles_[y][x][2], tile5, "Inserted tile at layer 2, but found " + str(map.tiles_[y][x][2]) + " there instead")
         self.assertEqual(tile5.occupant, tile2, "Inserted Tile5 under Tile2, but Tile5's occupant is not Tile2")
         self.assertEqual(tile1.occupant, tile5, "Inserted Tile5 above Tile1, but Tile1's occupant is not Tile5")
-        self.assertEqual(tile3.position.z, 26, "Inserted Tile5 at bottom of stack, but top tile did not rise by " + str(tile.height) + ", and is at " + str(tile3.position.z) + " instead")
+        self.assertEqual(tile3.position.z, 26, "Inserted Tile5 at bottom of stack, but top tile did not rise by " + str(tile.get_height()) + ", and is at " + str(tile3.position.z) + " instead")
         
     #--------------------------------------------------------------------------------
     def test_map_05_replace_tile(self):
@@ -219,7 +220,7 @@ class TestMap(unittest.TestCase):
         self.assertNotIn(tile2, map.tiles_[y][x], "Replaced Tile2 with Tile5, but Tile2 still found in stack")
         self.assertEqual(tile5.occupant, tile3, "Replaced Tile5 with Tile5, but Tile5's occupant is not Tile3")
         self.assertEqual(tile1.occupant, tile5, "Replaced Tile5 above Tile2, but Tile1's occupant is not Tile5")
-        self.assertEqual(tile3.position.z, 6, "Replaced Tile2 of height " + str(tile2.height) + " with Tile5 of height " + str(tile5.height) + ", but top tile did not lower by " + str(tile2.height - tile5.height) + ", and is at " + str(tile3.position.z) + " instead")                
+        self.assertEqual(tile3.position.z, 6, "Replaced Tile2 of height " + str(tile2.get_height()) + " with Tile5 of height " + str(tile5.get_height()) + ", but top tile did not lower by " + str(tile2.get_height() - tile5.get_height()) + ", and is at " + str(tile3.position.z) + " instead")                
 
         # Replace bottom tile (Tile1)
         tile4 = Tile(None, 8)
@@ -229,7 +230,7 @@ class TestMap(unittest.TestCase):
         self.assertEqual(map.tiles_[y][x][0], tile4, "Replaced Tile1 with Tile4, but found " + str(map.tiles_[y][x][0]) + " in its place instead")
         self.assertNotIn(tile1, map.tiles_[y][x], "Replaced Tile1 with Tile4, but Tile1 still found in stack")
         self.assertEqual(tile4.occupant, tile5, "Replaced Tile1 with Tile4, but Tile4's occupant is not Tile5")
-        self.assertEqual(tile3.position.z, 9, "Replaced Tile1 of height " + str(tile1.height) + " with Tile4 of height " + str(tile4.height) + ", but top tile did not rise by " + str(tile4.height - tile1.height) + ", and is at " + str(tile3.position.z) + " instead")
+        self.assertEqual(tile3.position.z, 9, "Replaced Tile1 of height " + str(tile1.get_height()) + " with Tile4 of height " + str(tile4.get_height()) + ", but top tile did not rise by " + str(tile4.get_height() - tile1.get_height()) + ", and is at " + str(tile3.position.z) + " instead")
 
     #--------------------------------------------------------------------------------
     def test_map_06_remove_tile(self):
@@ -275,7 +276,7 @@ class TestMap(unittest.TestCase):
         self.assertEqual(len(map.tiles_[y][x]), 2, "Removed Tile2 from 3-tile stack at (" + str(ix) + ", " + str(iy) + "), but it's " + str(len(map.tiles_[y][x])) + " tiles long, not 2")        
         self.assertNotIn(tile2, map.tiles_[y][x], "Removed Tile2, but still found it in stack")
         self.assertEqual(tile1.occupant, tile3, "Removed Tile2, but Tile1's occupant is " + str(tile3.occupant) + ", not Tile3")
-        self.assertEqual(tile3.position.z, 5, "Removed Tile2 of height " + str(tile2.height) + " but top tile did not fall by that amount and is at " + str(tile3.position.z) + " instead")
+        self.assertEqual(tile3.position.z, 5, "Removed Tile2 of height " + str(tile2.get_height()) + " but top tile did not fall by that amount and is at " + str(tile3.position.z) + " instead")
 
     #--------------------------------------------------------------------------------
     def test_map_07_unit_scale(self):
@@ -340,5 +341,35 @@ class TestMap(unittest.TestCase):
 
                 self.assertEqual(p1x.y - p2x.y, map.scale_.z * (p2.z - p1.z), "Isometric shift in y when shifting z from " + str(p1.z) + " to " + str(p2.z) + " for a map with scale " + str(map.scale_) + " should be " + str(map.scale_.z * (p2.z - p1.z)) + ", not " + str(p1x.y - p2x.y))
 
+    #--------------------------------------------------------------------------------
+    def test_map_09_get_height(self):
+    #--------------------------------------------------------------------------------
+        map = Map(2, 2)
+
+        # Setup map of three stacked tiles 
+        tile1 = Tile(None, 5)
+        tile2 = Tile(None, 3)
+        tile3 = Tile(None, 10)
+        
+        map.place(tile1, 0, 0)
+        map.place(tile2, 0, 1)
+        map.place(tile3, 1, 1)
+
+        # Out of bound coordinates should return False
+        self.assertFalse(map.height(sf.Vector2(-0.5, 0)), "Out-bound position " + str(sf.Vector2(-0.5, 0)) + " returned " + str(map.height(sf.Vector2(-0.5, 0))) + ", not False")
+        self.assertFalse(map.height(sf.Vector2(1.5, 0)), "Out-bound position " + str(sf.Vector2(1.5, 0)) + " returned " + str(map.height(sf.Vector2(1.5, 0))) + ", not False")
+        self.assertFalse(map.height(sf.Vector2(0, -0.5)), "Out-bound position " + str(sf.Vector2(0, -0.5)) + " returned " + str(map.height(sf.Vector2(0, -0.5))) + ", not False")
+        self.assertFalse(map.height(sf.Vector2(0, 1.5)), "Out-bound position " + str(sf.Vector2(0, 1.5)) + " returned " + str(map.height(sf.Vector2(0, 1.5))) + ", not False")
+
+        for dx in arange(-0.4, 0.5, 0.1):
+            for dy in arange(-0.4, 0.5, 0.1):
+                # Coordinate of a blank tile space should return False
+                self.assertFalse(map.height(sf.Vector2(1 + dx, 0 + dy)), "Blank region " + str(sf.Vector2(1 + dx, 0 + dy)) + " returned " + str(map.height(sf.Vector2(1 + dx, 0 + dy))) + ", not False")
+
+                # In-bound coordinate of a filled tile space should return the tile of that space
+                self.assertEqual(map.height(sf.Vector2(0 + dx, 0 + dy)), 5, "Position " + str(sf.Vector2(0 + dx, 0 + dy)) + " returned " + str(map.height(sf.Vector2(0 + dx, 0 + dy))) + ", not 5")
+                self.assertEqual(map.height(sf.Vector2(0 + dx, 1 + dy)), 3, "Position " + str(sf.Vector2(0 + dx, 1 + dy)) + " returned " + str(map.height(sf.Vector2(0 + dx, 1 + dy))) + ", not 3")
+                self.assertEqual(map.height(sf.Vector2(1 + dx, 1 + dy)), 10, "Position " + str(sf.Vector2(1 + dx, 1 + dy)) + " returned " + str(map.height(sf.Vector2(1 + dx, 1 + dy))) + ", not 10")
+                
 if __name__ == "__main__":
     unittest.main(verbosity = 2)

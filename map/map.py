@@ -60,7 +60,7 @@ class Map(sf.TransformableDrawable):
             i = 0            
             # If z is specified, try to get the tile whose z -> height region contains
             # z. If z is above the top-most tile, return the top-most.
-            while z > self.tiles_[y][x][i].position.z + self.tiles_[y][x][i].height and i < len(self.tiles_[y][x]) - 1:
+            while z > self.tiles_[y][x][i].position.z + self.tiles_[y][x][i].get_height() and i < len(self.tiles_[y][x]) - 1:
                 i += 1
                 
             return self.tiles_[y][x][i]     
@@ -80,12 +80,12 @@ class Map(sf.TransformableDrawable):
 
         # Place on the exact top of the highest tile at (x, y)
         if self.tiles_[y][x]:
-            z = self.tiles_[y][x][-1].position.z + self.tiles_[y][x][-1].height
+            z = self.tiles_[y][x][-1].position.z + self.tiles_[y][x][-1].get_height()
             tile.occupant = self.tiles_[y][x][-1].occupant
             self.tiles_[y][x][-1].occupant = tile
             
             if tile.occupant != None:
-                tile.occupant.rise(tile.height)
+                tile.occupant.rise(tile.get_height())
             
         tile.position = sf.Vector3(x, y, z)
         
@@ -111,11 +111,11 @@ class Map(sf.TransformableDrawable):
         z = 0
         
         if layer > 0:
-            z = self.tiles_[y][x][layer - 1].position.z + self.tiles_[y][x][layer - 1].height
+            z = self.tiles_[y][x][layer - 1].position.z + self.tiles_[y][x][layer - 1].get_height()
             self.tiles_[y][x][layer - 1].occupant = tile
                         
         tile.occupant = self.tiles_[y][x][layer]
-        tile.occupant.rise(tile.height)
+        tile.occupant.rise(tile.get_height())
         tile.position = sf.Vector3(x, y, z)
         
         self.tiles_[y][x].insert(layer, tile)
@@ -143,7 +143,7 @@ class Map(sf.TransformableDrawable):
         tile.occupant = self.tiles_[y][x][layer].occupant
             
         if tile.occupant != None:
-            difference = tile.height - self.tiles_[y][x][layer].height
+            difference = tile.get_height() - self.tiles_[y][x][layer].get_height()
             
             if difference > 0:
                 tile.occupant.rise(difference)
@@ -174,7 +174,7 @@ class Map(sf.TransformableDrawable):
             self.tiles_[y][x][layer - 1].occupant = self.tiles_[y][x][layer].occupant
             
         if self.tiles_[y][x][layer].occupant != None:
-            self.tiles_[y][x][layer].occupant.lower(self.tiles_[y][x][layer].height)
+            self.tiles_[y][x][layer].occupant.lower(self.tiles_[y][x][layer].get_height())
                 
         del self.tiles_[y][x][layer]
         
@@ -215,6 +215,20 @@ class Map(sf.TransformableDrawable):
         transform.translate(sf.Vector2(x, y))
         
         return transform
+
+    #----------------------------------------------------------------------------
+    # Get Height
+    #----------------------------------------------------------------------------
+    # * position : Grid (x, y) position by which to query the map height.
+    #----------------------------------------------------------------------------
+    def height(self, position):
+        x = int(round(position.x))
+        y = int(round(position.y))
+
+        tile = self.at(x, y)
+
+        if tile: return tile.get_height(sf.Vector2(position.x - x, position.y - y))
+        else: return False
 
     #----------------------------------------------------------------------------
     # - Draw (Overload)

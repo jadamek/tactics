@@ -6,13 +6,13 @@ class TestTiles(unittest.TestCase):
     def test_tile_00_initialization(self):
     #--------------------------------------------------------------------------------
         tile = Tile()
-        self.assertEqual(tile.height, 1.0, "Tile height improperly default initialized as: " + str(tile.height) + "; should be 1.0.")
+        self.assertEqual(tile.get_height(), 1.0, "Tile height improperly default initialized as: " + str(tile.get_height()) + "; should be 1.0.")
         
         tile = Tile(None, -10)
-        self.assertEqual(tile.height, 0.0, "Tile height improperly initialized as: " + str(tile.height) + "; should be 0.0")
+        self.assertEqual(tile.get_height(), 0.0, "Tile height improperly initialized as: " + str(tile.get_height()) + "; should be 0.0")
         
         tile = Tile(None, 10)
-        self.assertEqual(tile.height, 10.0, "Tile height improperly initialized as: " + str(tile.height) + "; should be 10")
+        self.assertEqual(tile.get_height(), 10.0, "Tile height improperly initialized as: " + str(tile.get_height()) + "; should be 10")
         
     #--------------------------------------------------------------------------------
     def test_tile_01_raise(self):
