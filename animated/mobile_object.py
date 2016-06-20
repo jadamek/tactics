@@ -1,9 +1,8 @@
 import sys, os
-sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../container")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 
-from zlist import ZObject
-import sfml as sf
-import math
+import sfml as sf, math, settings
+from container.zlist import ZObject
 from functools import partial
 
 #================================================================================
@@ -20,7 +19,6 @@ class MobileObject(ZObject):
     def __init__(self, ground = None):
         ZObject.__init__(self)
         self.speed = 1
-        self.fps = 1
         self.frozen = False
         self.ground = ground
         self.destination_ = []
@@ -72,10 +70,10 @@ class MobileObject(ZObject):
     #----------------------------------------------------------------------------
     def update(self, elapsed):
         if not self.frozen:
-            self.clock_ += elapsed
-            while self.clock_ >= 1.0 / self.fps:
+            self.clock_ += elapsed * self.speed
+            while self.clock_ >= 1.0 / settings.FPS:
                 self.step()
-                self.clock_ -= 1.0 / self.fps
+                self.clock_ -= 1.0 / settings.FPS
 
     #----------------------------------------------------------------------------
     # Compute Arrival (private)
@@ -84,11 +82,10 @@ class MobileObject(ZObject):
     #----------------------------------------------------------------------------
     def compute_arrival(self, destination):
         distance = math.sqrt((destination.x - self.position.x) ** 2 + (destination.y - self.position.y) ** 2)
-        return int(math.ceil(distance / self.speed * self.fps))
+        return int(math.ceil(distance * settings.FPS))
 
 # Members
     speed = 1
-    fps = 1
     frozen = False
     ground = None
     destination_ = None

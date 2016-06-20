@@ -228,7 +228,7 @@ class Map(sf.TransformableDrawable):
 
         tile = self.at(x_i, y_i)
 
-        if tile: return tile.get_height(sf.Vector2(x - x_i, y - y_i))
+        if tile: return tile.position.z + tile.get_height(sf.Vector2(x - x_i, y - y_i))
         else: return None
 
     #----------------------------------------------------------------------------
