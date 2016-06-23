@@ -48,16 +48,17 @@ class MobileObject(ZObject):
     # Increment Frame
     #----------------------------------------------------------------------------
     def step(self):
-        if len(self.destination_) > 0:            
-            x = self.position.x + (self.destination_[0].x - self.position.x) / float(self.arrival_)
-            y = self.position.y + (self.destination_[0].y - self.position.y) / float(self.arrival_)
-            z = self.ground.height(x, y) if self.ground is not None else self.position.z
-            if z is None: z = self.position.z
+        if len(self.destination_) > 0:
+            if self.arrival_ > 0:         
+                x = self.position.x + (self.destination_[0].x - self.position.x) / float(self.arrival_)
+                y = self.position.y + (self.destination_[0].y - self.position.y) / float(self.arrival_)
+                z = self.ground.height(x, y) if self.ground is not None else self.position.z
+                if z is None: z = self.position.z
 
-            self.position = sf.Vector3(x, y, z)
-            self.arrival_ -= 1
+                self.position = sf.Vector3(x, y, z)
+                self.arrival_ -= 1
 
-            if sf.Vector2(self.position.x, self.position.y) == self.destination_[0]:
+            if self.arrival_ == 0:
                 self.destination_.pop(0)                    
 
                 if len(self.destination_) > 0:
@@ -70,10 +71,10 @@ class MobileObject(ZObject):
     #----------------------------------------------------------------------------
     def update(self, elapsed):
         if not self.frozen:
-            self.clock_ += elapsed * self.speed
-            while self.clock_ >= 1.0 / settings.FPS:
+            self.clock_ += elapsed * self.speed * settings.FPS
+            while self.clock_ >= 1:
                 self.step()
-                self.clock_ -= 1.0 / settings.FPS
+                self.clock_ -= 1
 
     #----------------------------------------------------------------------------
     # Compute Arrival (private)
