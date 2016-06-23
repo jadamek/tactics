@@ -5,11 +5,11 @@
 		Tile
 			height()		X	X
 -	Moving Objects
-		MobileObject
-			moveTo()
-			moveAlong()
-			update()
-			__inc__()
+		MobileObject		X	X
+			moveTo()		X	X
+			moveAlong()		X	X
+			update()		X	X
+			step()			X	X
 		Animation
 			play()
 			stop()
@@ -17,15 +17,13 @@
 			frozen
 			loop
 			update()
-			__inc__()
-			__dec__	()		
+			step()
 		SpriteSheet
 			index
 			limit()
 			play()
 			update_frame()
-			__inc__()
-			__dec__()
+			step()
 		SpriteDirected
 			limit()
 			update_frame()
@@ -33,5 +31,4 @@
 			directions
 		SpriteCharacter
 			play()
-			__inc__()
-			__dec__()
+			step()
