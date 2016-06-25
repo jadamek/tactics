@@ -355,7 +355,7 @@ class TestMap(unittest.TestCase):
         map.place(tile2, 0, 1)
         map.place(tile3, 1, 1)
 
-        # Out of bound coordinates should return False
+        # Out of bound coordinates should return None
         self.assertEqual(map.height(-0.5, 0), None, "Out-bound position " + str(sf.Vector2(-0.5, 0)) + " returned " + str(map.height(-0.5, 0)) + ", not None")
         self.assertEqual(map.height(1.5, 0), None, "Out-bound position " + str(sf.Vector2(1.5, 0)) + " returned " + str(map.height(1.5, 0)) + ", not None")
         self.assertEqual(map.height(0, -0.5), None, "Out-bound position " + str(sf.Vector2(0, -0.5)) + " returned " + str(map.height(0, -0.5)) + ", not None")
@@ -363,7 +363,7 @@ class TestMap(unittest.TestCase):
 
         for dx in arange(-0.4, 0.5, 0.1):
             for dy in arange(-0.4, 0.5, 0.1):
-                # Coordinate of a blank tile space should return False
+                # Coordinate of a blank tile space should return None
                 self.assertEqual(map.height(1 + dx, 0 + dy), None, "Blank region " + str(sf.Vector2(1 + dx, 0 + dy)) + " returned " + str(map.height(1 + dx, 0 + dy)) + ", not None")
 
                 # In-bound coordinate of a filled tile space should return the tile of that space

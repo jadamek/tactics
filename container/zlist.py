@@ -216,6 +216,22 @@ class ZObject(sf.Drawable):
     #----------------------------------------------------------------------------
     def __ge__(self, other):
         return not self.__lt__(other)
+
+    #----------------------------------------------------------------------------
+    # - Set Position
+    #----------------------------------------------------------------------------
+    # * position : new 3-D position of the object
+    # Sets the position of the object to a new location, and sorts appropriately
+    #----------------------------------------------------------------------------
+    def set_position(self, position):
+        dx, dy, dz = self.position.x - position.x, self.position.y - position.y, self.position.z - position.z
+        self.position = position
+
+        if self.handler is not None:
+            if dx + dy is 0:
+                self.handler.sortUp() if dz > 0 else self.handler.sortDown()
+            else:
+                self.handler.sortUp() if dx + dy > 0 else self.handler.sortDown()
     
 # Members
     handler = None

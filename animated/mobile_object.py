@@ -24,6 +24,9 @@ class MobileObject(ZObject):
         self.destination_ = []
         self.clock_ = 0.0
         self.arrival_ = 0
+        
+        if ground is not None:
+            self.set_position(sf.Vector3(0, 0, ground.height(0, 0)))
 
     #----------------------------------------------------------------------------
     # Move Linearly To Position
@@ -55,7 +58,7 @@ class MobileObject(ZObject):
                 z = self.ground.height(x, y) if self.ground is not None else self.position.z
                 if z is None: z = self.position.z
 
-                self.position = sf.Vector3(x, y, z)
+                self.set_position(sf.Vector3(x, y, z))
                 self.arrival_ -= 1
 
             if self.arrival_ == 0:
