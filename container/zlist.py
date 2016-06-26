@@ -224,7 +224,7 @@ class ZObject(sf.Drawable):
     # Sets the position of the object to a new location, and sorts appropriately
     #----------------------------------------------------------------------------
     def set_position(self, position):
-        dx, dy, dz = self.position.x - position.x, self.position.y - position.y, self.position.z - position.z
+        dx, dy, dz = position.x - self.position.x, position.y - self.position.y, position.z - self.position.z
         self.position = position
 
         if self.handler is not None:

@@ -60,6 +60,7 @@ class Tile(ZObject):
     # - Get Height
     #----------------------------------------------------------------------------
     # * position : (x,y) position relative to the center of the tile
+    # Returns the height of a tile at a point relative to its center.
     #----------------------------------------------------------------------------
     def get_height(self, position = sf.Vector2()):
         # Must be within a 1.0 x 1.0 space of the center of this tile

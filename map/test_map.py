@@ -1,6 +1,9 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
+
 from map import Map
 from tile import Tile
-import unittest, random, sfml as sf
+import unittest, random, sfml as sf, settings
 from numpy import arange
 
 class TestMap(unittest.TestCase):
@@ -284,9 +287,9 @@ class TestMap(unittest.TestCase):
         # Default scale
         map = Map(2, 2)
         
-        self.assertEqual(map.scale_.x, 32, "Default map's width scaling should be 32px/unit, but is " + str(map.scale_.x))
-        self.assertEqual(map.scale_.y, 24, "Default map's length scaling should be 24px/unit, but is " + str(map.scale_.y))
-        self.assertEqual(map.scale_.z, 8, "Default map's height scaling should be 8px/unit, but is " + str(map.scale_.z))
+        self.assertEqual(map.scale_.x, settings.MAP_SCALE.x, "Default map's width scaling should be %dpx/unit, but is %d" % (settings.MAP_SCALE.x, map.scale_.x))
+        self.assertEqual(map.scale_.y, settings.MAP_SCALE.y, "Default map's length scaling should be %dpx/unit, but is %d" % (settings.MAP_SCALE.y, map.scale_.y))
+        self.assertEqual(map.scale_.z, settings.MAP_SCALE.z, "Default map's height scaling should be %dpx/unit, but is %d" % (settings.MAP_SCALE.z, map.scale_.z))
         
         # Scale specified out of bounds
         map = Map(2, 2, sf.Vector3(0, 0, 0))

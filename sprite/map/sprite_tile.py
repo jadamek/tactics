@@ -49,6 +49,9 @@ class SpriteTile(sf.TransformableDrawable):
     #----------------------------------------------------------------------------
     # - Reset Height
     #----------------------------------------------------------------------------            
+    # * height : new height of the tile sprite
+    # Recompute sub-sprite widths and positions for a new virtual height.
+    #----------------------------------------------------------------------------            
     def reset_height(self, height):
         self.height = height
         if height < 0:

@@ -32,6 +32,7 @@ class MobileObject(ZObject):
     # Move Linearly To Position
     #----------------------------------------------------------------------------
     # * destination : position the object will eventually arrive at
+    # Sets the object's target destination to a single location
     #----------------------------------------------------------------------------
     def moveTo(self, position):
         self.destination_ = [position]
@@ -41,6 +42,7 @@ class MobileObject(ZObject):
     # Move Along a Path
     #----------------------------------------------------------------------------
     # * path : a list of consecutive destinations
+    # Sets the object's destination as a path, or list of consecutive locations
     #----------------------------------------------------------------------------
     def moveAlong(self, path):
         if type(path) is list:
@@ -49,6 +51,8 @@ class MobileObject(ZObject):
 
     #----------------------------------------------------------------------------
     # Increment Frame
+    #----------------------------------------------------------------------------
+    # Propagates the object's motion along a height map, or 'ground'
     #----------------------------------------------------------------------------
     def step(self):
         if len(self.destination_) > 0:

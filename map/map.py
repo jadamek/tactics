@@ -1,6 +1,8 @@
 import sfml as sf, copy, sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../container")
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 from zlist import ZList
+import settings
 
 #================================================================================
 class Map(sf.TransformableDrawable):
@@ -17,7 +19,7 @@ class Map(sf.TransformableDrawable):
     # * scale : unit scale vector which describes pixels per unit distance for
     #       width (x), length (y) and height (z)
     #----------------------------------------------------------------------------
-    def __init__(self, width = 10, length = 10, scale = sf.Vector3(32, 24, 8)):
+    def __init__(self, width = 10, length = 10, scale = settings.MAP_SCALE):
         sf.Drawable.__init__(self)
         
         # Sanitization
@@ -201,6 +203,8 @@ class Map(sf.TransformableDrawable):
     #----------------------------------------------------------------------------
     # * local : 3-D position in local coordinate system, which is used to compute
     #       the 2-D isometric transform for graphic coordinates.
+    # Returns a transform which translates a given local-coordinate into a
+    # graphical one for drawing isometrically.
     #----------------------------------------------------------------------------
     def get_isometric_transform(self, local):
         transform = sf.Transform()
@@ -221,6 +225,8 @@ class Map(sf.TransformableDrawable):
     #----------------------------------------------------------------------------
     # * x : x-coordinate of position by which to query the map height.
     # * y : y-coordinate of position by which to query the map height.
+    # Returns the height of an (x, y) position on the map, or None if the space
+    # is out of bounds or unfilled.
     #----------------------------------------------------------------------------
     def height(self, x, y):
         x_i = int(round(x))
@@ -230,6 +236,15 @@ class Map(sf.TransformableDrawable):
 
         if tile: return tile.position.z + tile.get_height(sf.Vector2(x - x_i, y - y_i))
         else: return None
+
+    #----------------------------------------------------------------------------
+    # Add Object
+    #----------------------------------------------------------------------------
+    # * obj : isometric ZObject to add to this map's xyz-sorted image container,
+    #       or Zlist
+    #----------------------------------------------------------------------------
+    def add_object(self, obj):
+        self.images_.add(obj)
 
     #----------------------------------------------------------------------------
     # - Draw (Overload)
