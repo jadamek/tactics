@@ -4,6 +4,7 @@ from map.map import Map
 from map.tile import Tile
 from objects.mobile_object import MobileObject
 from objects.actor import Actor
+from rectangle import Rectangle
 
 dirt_texture = sf.Texture.from_file('resources/graphics/Tile.png')
 grass_texture = sf.Texture.from_file('resources/graphics/GrassTile.png')
@@ -18,6 +19,7 @@ for x in range(map.width):
 
         tile_sprite = SpriteTile(dirt_texture, map.scale_.x, map.scale_.y, map.scale_.z * height)
         tile = Tile(tile_sprite, height)
+        tile.name_ = "g-%d-%d" % (x, y)
                 
         map.place(tile, x, y)
 
@@ -26,6 +28,7 @@ for x in range(map.width):
 
         tile_sprite = SpriteTile(grass_texture, map.scale_.x, map.scale_.y, map.scale_.z * height)
         tile = Tile(tile_sprite, height)
+        tile.name_ = "f1-%d-%d" % (x, y)
 
         map.place(tile, x, y)
 
@@ -35,7 +38,14 @@ soul_sprite = sf.Sprite(soul_texture)
 soul_sprite.move(sf.Vector2(-12, -40))
 
 soul = Actor(soul_sprite, map)
+soul.name_ = "soul"
 map.add_object(soul)
+soul.moveAlong([sf.Vector2(map.width - 1, 0), sf.Vector2(map.width - 1, map.length - 1), sf.Vector2(0, map.length - 1), sf.Vector2(0, 0)])
+soul.set_position(sf.Vector3(0, 1.0, map.height(0, 1.0)))
+soul.set_position(sf.Vector3(0, 0.4, map.height(0, 0.4)))
+
+#print map.at(0, 0).name_, "<=", map.at(1, 0, 0).name_, "?", map.at(0, 0) <= map.at(1, 0, 0)
+#print map.at(1, 0, 0).name_, ">", map.at(0, 0).name_, "?", map.at(1, 0, 0) > map.at(0, 0)
 
 #Place (0, 0, 0) cursor        
 target = sf.Texture.from_file('resources/graphics/Target.png')
@@ -50,7 +60,6 @@ window.view = view
 clock = sf.Clock()
 elapsed = 0.0
 
-soul.moveAlong([sf.Vector2(9, 0), sf.Vector2(9, 9), sf.Vector2(0, 9), sf.Vector2(0, 0)])
 while window.is_open:
     for event in window.events:
         if type(event) is sf.CloseEvent:
@@ -62,3 +71,4 @@ while window.is_open:
     window.draw(map)
     window.draw(cursor)
     window.display()
+

@@ -1,4 +1,5 @@
 import sfml as sf
+from rectangle import Rectangle
 
 #================================================================================
 class ZNode:
@@ -75,7 +76,7 @@ class ZNode:
 
         if seeker != None:
             while True:
-                if self.target <= seeker.target:
+                if self.target <= seeker.target:# and self.target.get_isometric_bounds().intersects(seeker.target.get_isometric_bounds()) is not None:
                     if seeker is not self.next:
                         self.reattach(seeker.prev, seeker)                                
                     break
@@ -94,7 +95,7 @@ class ZNode:
         seeker = self.prev
 
         while seeker.prev != None:
-            if self.target >= seeker.target:
+            if self.target >= seeker.target:# and self.target.get_isometric_bounds().intersects(seeker.target.get_isometric_bounds()) is not None:
                 break
             seeker = seeker.prev
             
@@ -176,7 +177,7 @@ class ZObject(sf.Drawable):
         if self.handler != None:
             self.handler.detach()
             del self.handler
-            
+
     #----------------------------------------------------------------------------
     # - Less Than Comparison (Overload)
     #----------------------------------------------------------------------------
@@ -186,8 +187,8 @@ class ZObject(sf.Drawable):
     def __lt__(self, other):
         if self.position.x + self.position.y == other.position.x + other.position.y:
             return self.position.z < other.position.z
-        return self.position.x + self.position.y < other.position.x + other.position.y
-        
+        else:
+            return self.position.x + self.position.y < other.position.x + other.position.y
     #----------------------------------------------------------------------------
     # - Greater Than Comparison (Overload)
     #----------------------------------------------------------------------------
@@ -197,7 +198,8 @@ class ZObject(sf.Drawable):
     def __gt__(self, other):
         if self.position.x + self.position.y == other.position.x + other.position.y:
             return self.position.z > other.position.z
-        return self.position.x + self.position.y > other.position.x + other.position.y
+        else:
+            return self.position.x + self.position.y > other.position.x + other.position.y
         
     #----------------------------------------------------------------------------
     # - Less Than Or Equal To Comparison (Overload)
@@ -232,9 +234,28 @@ class ZObject(sf.Drawable):
                 self.handler.sortUp() if dz > 0 else self.handler.sortDown()
             else:
                 self.handler.sortUp() if dx + dy > 0 else self.handler.sortDown()
+
+    #----------------------------------------------------------------------------
+    # - Get Height (=0)
+    #----------------------------------------------------------------------------
+    # * position : (x,y) position relative to the center of the tile
+    # Returns the height of a tile at a point relative to its center.
+    #----------------------------------------------------------------------------
+    def get_height(self, position = sf.Vector2()):
+        return 1.0
     
+    #----------------------------------------------------------------------------
+    # - Get Isometric bounding rectangle
+    #----------------------------------------------------------------------------
+    # Returns the rectangle that describes the total relative 2-D projected space
+    # the object occupies.
+    #----------------------------------------------------------------------------
+    def get_isometric_bounds(self):
+        return Rectangle(0.5 * (self.position.x - self.position.y - 1), 0.5 * (self.position.x + self.position.y - 1) - self.position.z - self.get_height(), 1.0, 1.0 + self.get_height())
+
 # Members
     handler = None
     position = None
+    name_ = ""
 #================================================================================
     

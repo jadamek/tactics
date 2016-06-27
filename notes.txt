@@ -1,0 +1,13 @@
+-mobile.moving?/stopMoving()
+-screen.scroll, zoom
+-cursor, center screen on cursor, etc.
+-sheet, directional, spritecharacter
+-character: change dir on move (facing)	
+	jump
+	fly
+	hover
+	in-water: sep sprite changes with submerge depth
+	etc.
+
+-- 
+Jordan Adamek
