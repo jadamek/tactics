@@ -146,5 +146,20 @@ class TestMobileObject(unittest.TestCase):
         obj.update(1.0)
         self.assertEqual(obj.position.z, 10, "Object move to ~(0, 1) with height %f, but has z-coordinate %f" % (tile2.height, obj.position.z))
 
+    #--------------------------------------------------------------------------------
+    def test_mobile_object_04_stop_motion(self):
+    #--------------------------------------------------------------------------------
+        obj = MobileObject()
+    
+        self.assertFalse(obj.moving(), "Newly constructed object initialized as moving.")
+
+        obj.moveTo(sf.Vector2(random.randint(1, 100), random.randint(1, 100)))
+        self.assertTrue(obj.moving(), "Object with destination %s and arrival time %d is not moving" % (obj.destination_, obj.arrival_))
+
+        obj.stop_moving()
+        self.assertEqual(obj.destination_, [], "Recently halted object has destination %s" % (obj.destination_))
+        self.assertEqual(obj.arrival_, 0, "Recently halted object has arrival %d" % (obj.arrival_))
+        self.assertFalse(obj.moving(), "Recently halted object is moving.")
+
     # Constants
     triples = [(3, 4, 5), (6, 8, 10), (5, 12, 13), (7, 24, 25), (8, 15, 17)]
