@@ -234,25 +234,7 @@ class ZObject(sf.Drawable):
                 self.handler.sortUp() if dz > 0 else self.handler.sortDown()
             else:
                 self.handler.sortUp() if dx + dy > 0 else self.handler.sortDown()
-
-    #----------------------------------------------------------------------------
-    # - Get Height (=0)
-    #----------------------------------------------------------------------------
-    # * position : (x,y) position relative to the center of the tile
-    # Returns the height of a tile at a point relative to its center.
-    #----------------------------------------------------------------------------
-    def get_height(self, position = sf.Vector2()):
-        return 1.0
     
-    #----------------------------------------------------------------------------
-    # - Get Isometric bounding rectangle
-    #----------------------------------------------------------------------------
-    # Returns the rectangle that describes the total relative 2-D projected space
-    # the object occupies.
-    #----------------------------------------------------------------------------
-    def get_isometric_bounds(self):
-        return Rectangle(0.5 * (self.position.x - self.position.y - 1), 0.5 * (self.position.x + self.position.y - 1) - self.position.z - self.get_height(), 1.0, 1.0 + self.get_height())
-
 # Members
     handler = None
     position = None

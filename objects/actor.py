@@ -23,9 +23,6 @@ class Actor(MobileObject):
         if self.sprite != None:
             target.draw(self.sprite, states)
 
-    def get_height(self, position = None):
-        return 200
-
 # Members
     sprite = None
 #================================================================================
