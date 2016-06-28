@@ -1,25 +1,10 @@
-construction
-	default - Ground => None
-		  Ground => ground
-moveTo
-	dest = [pos]
-	arrival = distance * fps
-
-moveAlong
-	dest = path
-	arrival = " " for path[0]
-
-step/motion
-	after 1/2 'arrival' steps, half way thru
-	after 'arrival' steps, done
-	after arrival, if path	continues to next
-				empty dest
-
-grounded motion
-	ground None	keeps same z-pos
-	grounded	valid pos	matches z to z + height
-			invalid pos	keeps same z-pos as last
-
-frozen
-	frozen	doesn't update
-			does 
+-mobile.moving?/stopMoving()
+-screen.scroll, zoom
+-cursor, center screen on cursor, etc.
+-sheet, directional, spritecharacter
+-character: change dir on move (facing)	
+	jump
+	fly
+	hover
+	in-water: sep sprite changes with submerge depth
+	etc.

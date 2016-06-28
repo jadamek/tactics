@@ -92,6 +92,21 @@ class MobileObject(ZObject):
         distance = math.sqrt((destination.x - self.position.x) ** 2 + (destination.y - self.position.y) ** 2)
         return int(math.ceil(distance * settings.FPS))
 
+    #----------------------------------------------------------------------------
+    # Is Object Moving?
+    #----------------------------------------------------------------------------
+    def moving(self):
+        return len(self.destination_) > 0
+
+    #----------------------------------------------------------------------------
+    # Stop Moving
+    #----------------------------------------------------------------------------
+    # Cancels current destination and motion
+    #----------------------------------------------------------------------------
+    def stop_moving(self):
+        self.destination_ = []
+        self.arrival_ = 0
+
 # Members
     speed = 1
     frozen = False

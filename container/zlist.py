@@ -185,7 +185,7 @@ class ZObject(sf.Drawable):
     # comparing their virtual 3-D positions.
     #----------------------------------------------------------------------------
     def __lt__(self, other):
-        if self.position.x + self.position.y == other.position.x + other.position.y:
+        if abs(self.position.x + self.position.y - other.position.x - other.position.y) <= 0.5:
             return self.position.z < other.position.z
         else:
             return self.position.x + self.position.y < other.position.x + other.position.y
@@ -196,7 +196,7 @@ class ZObject(sf.Drawable):
     # by comparing their virtual 3-D positions.
     #----------------------------------------------------------------------------
     def __gt__(self, other):
-        if self.position.x + self.position.y == other.position.x + other.position.y:
+        if abs(self.position.x + self.position.y - other.position.x - other.position.y) <= 0.5:
             return self.position.z > other.position.z
         else:
             return self.position.x + self.position.y > other.position.x + other.position.y

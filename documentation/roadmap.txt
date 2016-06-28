@@ -18,8 +18,8 @@ Roadmap-
 			Cursor:Move(smooth?)
 		ExView
 			Scroll
--	+ Menus (By Key)
 -	+ Animated Objects
+-	+ Menus (By Key)
 
 Product Backlog
 	- MapCursor vs. Main Cursor (a hand)
