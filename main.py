@@ -40,9 +40,7 @@ soul_sprite.move(sf.Vector2(-12, -40))
 soul = Actor(soul_sprite, map)
 soul.name_ = "soul"
 map.add_object(soul)
-soul.moveAlong([sf.Vector2(map.width - 1, 0), sf.Vector2(map.width - 1, map.length - 1), sf.Vector2(0, map.length - 1), sf.Vector2(0, 0)])
-soul.set_position(sf.Vector3(0, 1.0, map.height(0, 1.0)))
-soul.set_position(sf.Vector3(0, 0.4, map.height(0, 0.4)))
+#soul.moveAlong([sf.Vector2(map.width - 1, 0), sf.Vector2(map.width - 1, map.length - 1), sf.Vector2(0, map.length - 1), sf.Vector2(0, 0)])
 
 #print map.at(0, 0).name_, "<=", map.at(1, 0, 0).name_, "?", map.at(0, 0) <= map.at(1, 0, 0)
 #print map.at(1, 0, 0).name_, ">", map.at(0, 0).name_, "?", map.at(1, 0, 0) > map.at(0, 0)
@@ -63,8 +61,20 @@ elapsed = 0.0
 while window.is_open:
     for event in window.events:
         if type(event) is sf.CloseEvent:
-            window.close()            
-                    
+            window.close()
+    if not soul.moving():
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.LEFT):
+            soul.moveTo(soul.position + sf.Vector3(-1.0, 0, 0))
+        elif sf.Keyboard.is_key_pressed(sf.Keyboard.RIGHT):
+            soul.moveTo(soul.position + sf.Vector3(1.0, 0, 0))
+        elif sf.Keyboard.is_key_pressed(sf.Keyboard.UP):
+            soul.moveTo(soul.position + sf.Vector3(0.0, -1.0, 0))
+        elif sf.Keyboard.is_key_pressed(sf.Keyboard.DOWN):
+            soul.moveTo(soul.position + sf.Vector3(0, 1.0, 0))
+
+    if sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE):
+        window.close()
+
     elapsed = clock.restart().seconds
     soul.update(elapsed)
     window.clear()

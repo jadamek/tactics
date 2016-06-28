@@ -10,6 +10,27 @@
 			moveAlong()		X	X
 			update()		X	X
 			step()			X	X
+-	Screen Control
+		ViewEx
+			flash()
+			flashing()
+			fadeIn/Out()
+			tint()
+			scroll()
+			scrollTo()
+			stopScroll()
+			shake()
+			stopShake()
+			shaking()
+			zoom()
+			stopZoom()
+			spin()
+			stopSpin()
+			spinning()
+			update()		X
+			step()
+			draw()			X	
+-	Animated Objects
 		Animation
 			play()
 			stop()
