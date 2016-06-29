@@ -1,3 +1,6 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
+
 import settings, sfml as sf, copy
 
 #================================================================================
@@ -10,9 +13,10 @@ class ViewEx(sf.View):
     #----------------------------------------------------------------------------
     # ViewEx Constructor
     #----------------------------------------------------------------------------
-    # * rectangle :  intial viewing zone, centered at x,y with view size w,h
+    # * rectangle :  intial viewing zone, top-left corcner at x,y with view size
+    #       width, height
     #----------------------------------------------------------------------------
-    def __init__(self, rectangle = sf.Rectangle(sf.Vector2(320, 240), sf.Vector2(640, 480))):
+    def __init__(self, rectangle = sf.Rectangle(sf.Vector2(), sf.Vector2(640, 480))):
         sf.View.__init__(self, rectangle)
 
         self.center_ = self.center
@@ -22,9 +26,7 @@ class ViewEx(sf.View):
         self.speed = 1
         self.frozen = False
 
-        self.flash_box_ = sf.RectangleShape(sf.Vector2(10000, 10000))
-        self.flash_box_.origin = sf.Vector2(5000, 5000)
-        self.flash_box_.scale = sf.Vector2((rectangle.width + 50) / 10000.0, (rectangle.height + 50) / 10000.0)
+        self.flash_box_ = sf.RectangleShape(sf.Vector2(2000, 2000))
         self.flash_box_.position = self.center
         self.flash_box_.fill_color = sf.Color(0, 0, 0, 0)
         self.tint_box_ = copy.copy(self.flash_box_)
@@ -39,8 +41,6 @@ class ViewEx(sf.View):
     def set_center(self, center):
         self.center = center
         self.center_ = center
-        self.tint_box_.position = center
-        self.flash_box_.position = center
 
     #----------------------------------------------------------------------------
     # Set View Window Size
@@ -48,11 +48,7 @@ class ViewEx(sf.View):
     # Functionally overrides a basic size set to include updates for extensions
     #----------------------------------------------------------------------------
     def set_size(self, size):
-        size *= self.zoom_
-
-        self.size = size
-        self.tint_box_.scale = (size + sf.Vector2(50, 50)) / 10000.0
-        self.flash_box_.scale = (size + sf.Vector2(50, 50)) / 10000.0
+        self.size = size * self.zoom_
 
     #----------------------------------------------------------------------------
     # - Move View Center
@@ -62,8 +58,6 @@ class ViewEx(sf.View):
     def move(self, offset):
         self.center = self.center + offset
         self.center_ = self.center_ + offset
-        self.tint_box_.position= self.tint_box_.position + offset
-        self.flash_box_.position = self.flash_box_.position + offset
         
     #----------------------------------------------------------------------------
     # - Set View Rotation Angle
@@ -75,8 +69,6 @@ class ViewEx(sf.View):
     def set_rotation(self, angle):
         sf.View.rotation = angle
         self.rotation_ = angle
-        self.tint_box_.rotation = angle
-        self.flash_box_.rotation = angle
 
     #----------------------------------------------------------------------------
     # - Rotate View (Overload)
@@ -87,8 +79,6 @@ class ViewEx(sf.View):
     def rotate(self, angle):
         sf.View.rotate(angle)
         self.rotation_ += angle
-        self.tint_box_.rotate(angle)
-        self.flash_box_.rotate(angle)
 
     #----------------------------------------------------------------------------
     # Scale (Zoom) Viewing Zone
@@ -100,16 +90,14 @@ class ViewEx(sf.View):
         if factor > 0:
             size = self.size / zoom_
             zoom_ *= factor
-            size *= zoom_
-
+            size *= zoom_            
             self.size = size
-            self.tint_box_.scale = (size + sf.Vector2(50, 50)) / 10000.0
-            self.flash_box_.scale = (size + sf.Vector2(50, 50)) / 10000.0
 
     #----------------------------------------------------------------------------
     # - Reset View (Overload)
     #----------------------------------------------------------------------------
-    # * rectangle : new viewing zone, centered on x,y with region size w,h
+    # * rectangle : new viewing zone, top-left corcner on x,y with region size
+    #       width, height
     # Overloaded to include updates for extensions
     #----------------------------------------------------------------------------
     def reset(self, rectangle):

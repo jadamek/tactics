@@ -8,3 +8,23 @@
 	hover
 	in-water: sep sprite changes with submerge depth
 	etc.
+
+tests
+	construction
+		center_ centered on same point as view with color(0,0,0,0)
+	reset
+		^
+	set_center/move
+		center_ centered on same point as view
+	set_rotation/rotate
+		initially 0.0
+		rotation_ same angle as view
+	scale
+		initially 1.0
+		zoom_ reflects accumulative scale changes, view grows/shrinks with factor
+	set_size
+		size, change size retaining zoom_
+
+replace sf.View. with self. // skeptical
+tint/flash box should simply be drawn after view is reset back to screen default, no rotation/scale/re-centering needed
+settings.Resolution will track this screen size
