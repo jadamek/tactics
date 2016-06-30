@@ -67,8 +67,8 @@ class ViewEx(sf.View):
     # extensions
     #----------------------------------------------------------------------------
     def set_rotation(self, angle):
-        sf.View.rotation = angle
-        self.rotation_ = angle
+        self.rotation = angle
+        self.rotation_ = self.rotation
 
     #----------------------------------------------------------------------------
     # - Rotate View (Overload)
@@ -77,8 +77,8 @@ class ViewEx(sf.View):
     # Overloaded to include updates for extensions
     #----------------------------------------------------------------------------
     def rotate(self, angle):
-        sf.View.rotate(angle)
-        self.rotation_ += angle
+        self.rotation += angle
+        self.rotation_ += angle        
 
     #----------------------------------------------------------------------------
     # Scale (Zoom) Viewing Zone
@@ -88,9 +88,9 @@ class ViewEx(sf.View):
     #----------------------------------------------------------------------------
     def scale(self, factor):
         if factor > 0:
-            size = self.size / zoom_
-            zoom_ *= factor
-            size *= zoom_            
+            size = self.size / self.zoom_
+            self.zoom_ *= factor
+            size *= self.zoom_            
             self.size = size
 
     #----------------------------------------------------------------------------
@@ -101,7 +101,8 @@ class ViewEx(sf.View):
     # Overloaded to include updates for extensions
     #----------------------------------------------------------------------------
     def reset(self, rectangle):
-        sf.View.reset(rectangle)
+        super(ViewEx, self).reset(rectangle)
+        self.zoom_ = 1.0
         self.set_center(self.center)
         self.set_size(rectangle.size)
         self.set_rotation(self.rotation)
