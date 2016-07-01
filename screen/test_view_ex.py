@@ -112,6 +112,12 @@ class TestViewEx(unittest.TestCase):
         self.assertEqual(view.size, window_size, "Scaling view by %f should retain old window dimensions of %s, not %s" % (-1.0, window_size, view.size))
         self.assertEqual(view.zoom_, 1.0, "Scaling view by %f should retain old total zoom of %f, not %f" % (-1.0, 1.0, view.zoom_))
 
+        # Scale with zero should also do nothing (return None)
+        self.assertEqual(view.scale(0), None, "Scaling by a factor %f should return None" % (0))
+        self.assertEqual(view.size, window_size, "Scaling view by %f should retain old window dimensions of %s, not %s" % (0, window_size, view.size))
+        self.assertEqual(view.zoom_, 1.0, "Scaling view by %f should retain old total zoom of %f, not %f" % (0, 1.0, view.zoom_))
+
+
     #--------------------------------------------------------------------------------
     def test_view_ex_04_set_size(self):
     #--------------------------------------------------------------------------------

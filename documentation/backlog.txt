@@ -16,14 +16,16 @@
 			flashing()
 			fadeIn/Out()
 			tint()
-			scroll()
-			scrollTo()
-			stopScroll()
+			scroll()		X
+			scrollTo()		X
+			stopScroll()	X
+			scrolling()		X
 			shake()
 			stopShake()
 			shaking()
 			zoom()
 			stopZoom()
+			zooming()
 			spin()
 			stopSpin()
 			spinning()

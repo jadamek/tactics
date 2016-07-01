@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 
-import settings, sfml as sf, copy
+import settings, sfml as sf, copy, math
 
 #================================================================================
 class ViewEx(sf.View):
@@ -94,6 +94,44 @@ class ViewEx(sf.View):
             self.size = size
 
     #----------------------------------------------------------------------------
+    # - Scroll
+    #----------------------------------------------------------------------------
+    # * distance : the offset vector to scroll along
+    # * duration : time in seconds the scroll will be completed in    
+    # Starts the scrolling process by setting and computing a frame-wise time
+    # length from the duration in seconds.
+    #----------------------------------------------------------------------------
+    def scroll(self, offset, duration):
+        self.scroll_target_ = self.center_ + offset
+        self.scroll_length_ = math.floor(duration * settings.FPS)
+
+    #----------------------------------------------------------------------------
+    # - Scroll to Point
+    #----------------------------------------------------------------------------
+    # * target : screen position to scroll to
+    # * duration : time in seconds the scroll will be completed in    
+    #----------------------------------------------------------------------------
+    def scrollTo(self, target, duration):
+        self.scroll_target_ = target
+        self.scroll_length_ = math.floor(duration * settings.FPS)
+
+    #----------------------------------------------------------------------------
+    # - Is Scrolling?
+    #----------------------------------------------------------------------------
+    # Returns whether the view is currently scrolling
+    #----------------------------------------------------------------------------
+    def scrolling(self):
+        return self.scroll_length_ > 0
+
+    #----------------------------------------------------------------------------
+    # - Stop Scrolling
+    #----------------------------------------------------------------------------
+    # Ceases any scroll motion by setting the duration to 0.
+    #----------------------------------------------------------------------------
+    def stop_scrolling(self):
+        self.scroll_length_ = 0
+
+    #----------------------------------------------------------------------------
     # - Reset View (Overload)
     #----------------------------------------------------------------------------
     # * rectangle : new viewing zone, top-left corcner on x,y with region size
@@ -120,10 +158,14 @@ class ViewEx(sf.View):
     #----------------------------------------------------------------------------
     # Increment Frame
     #----------------------------------------------------------------------------
-    # Updates all active extensions, such as flashing and shaking
+    # Updates all active screen actions, such as flashing and shaking
     #----------------------------------------------------------------------------
     def step(self):
-        pass
+        # Update Scrolling
+        if self.scroll_length_ > 0:
+            self.center_ += (self.scroll_target_ - self.center_) / self.scroll_length_
+            self.center = self.center_
+            self.scroll_length_ -= 1
 
     #----------------------------------------------------------------------------
     # Update
@@ -147,6 +189,9 @@ class ViewEx(sf.View):
     tint_color_ = None
     tint_length_ = 0
 
+    tint_box_ = None
+    flash_box_ = None
+
     scroll_target_ = None
     scroll_length_ = 0
 
@@ -156,9 +201,6 @@ class ViewEx(sf.View):
     shake_length_ = 0
     shake_loop_ = False
     shake_dir_ = 0
-
-    tint_box_ = None
-    flash_box_ = None
 
     zoom_ = 1.0
     zoom_rate_ = 0.0

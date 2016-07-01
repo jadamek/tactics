@@ -5,6 +5,7 @@ from map.tile import Tile
 from objects.mobile_object import MobileObject
 from objects.actor import Actor
 from rectangle import Rectangle
+from screen.view_ex import ViewEx
 
 dirt_texture = sf.Texture.from_file('resources/graphics/Tile.png')
 grass_texture = sf.Texture.from_file('resources/graphics/GrassTile.png')
@@ -53,7 +54,10 @@ cursor.move(sf.Vector2(-8,-8))
 window = sf.RenderWindow(sf.VideoMode(640, 480), 'Tactics!')
 window.framerate_limit = 60
 
-view = sf.View(sf.Rectangle((-320, -240), (640, 480)))
+path = [sf.Vector2(80, 60), sf.Vector2(-60, 80), sf.Vector2(-80, -60), sf.Vector2(60, -80)]
+p = 0
+
+view = ViewEx(sf.Rectangle((-320, -240), (640, 480)))
 window.view = view
 clock = sf.Clock()
 elapsed = 0.0
@@ -62,21 +66,44 @@ while window.is_open:
     for event in window.events:
         if type(event) is sf.CloseEvent:
             window.close()
-    if not soul.moving():
-        if sf.Keyboard.is_key_pressed(sf.Keyboard.LEFT):
+
+    if sf.Keyboard.is_key_pressed(sf.Keyboard.LEFT):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_SHIFT):
+            if not view.scrolling():
+                view.scroll(sf.Vector2(-32, 0), 0.5)
+        elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(-1.0, 0, 0))
-        elif sf.Keyboard.is_key_pressed(sf.Keyboard.RIGHT):
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.RIGHT):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_SHIFT):
+            if not view.scrolling():
+                view.scroll(sf.Vector2(32, 0), 0.5)
+        elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(1.0, 0, 0))
-        elif sf.Keyboard.is_key_pressed(sf.Keyboard.UP):
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.UP):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_SHIFT):
+            if not view.scrolling():
+                view.scroll(sf.Vector2(0, -24), 0.5)
+        elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(0.0, -1.0, 0))
-        elif sf.Keyboard.is_key_pressed(sf.Keyboard.DOWN):
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.DOWN):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_SHIFT):
+            if not view.scrolling():
+                view.scroll(sf.Vector2(0, 24), 0.5)
+        elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(0, 1.0, 0))
 
-    if sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE):
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE):
         window.close()
+
+        view.scroll(path[p], 3)
+        p = (p + 1) % 4
 
     elapsed = clock.restart().seconds
     soul.update(elapsed)
+    view.update(elapsed)
     window.clear()
     window.draw(map)
     window.draw(cursor)
