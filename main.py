@@ -95,6 +95,12 @@ while window.is_open:
         elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(0, 1.0, 0))
 
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.S):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_CONTROL):
+            view.stop_shaking()
+        elif not view.shaking():
+            view.shake(32.0, 0.2)
+
     elif sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE):
         window.close()
 

@@ -1,4 +1,4 @@
-import sfml as sf
+import sfml as sf, math
 from rectangle import Rectangle
 
 #================================================================================
@@ -76,7 +76,7 @@ class ZNode:
 
         if seeker != None:
             while True:
-                if self.target <= seeker.target:# and self.target.get_isometric_bounds().intersects(seeker.target.get_isometric_bounds()) is not None:
+                if self.target <= seeker.target:
                     if seeker is not self.next:
                         self.reattach(seeker.prev, seeker)                                
                     break
@@ -95,7 +95,7 @@ class ZNode:
         seeker = self.prev
 
         while seeker.prev != None:
-            if self.target >= seeker.target:# and self.target.get_isometric_bounds().intersects(seeker.target.get_isometric_bounds()) is not None:
+            if self.target >= seeker.target:
                 break
             seeker = seeker.prev
             
@@ -185,7 +185,7 @@ class ZObject(sf.Drawable):
     # comparing their virtual 3-D positions.
     #----------------------------------------------------------------------------
     def __lt__(self, other):
-        if abs(self.position.x + self.position.y - other.position.x - other.position.y) <= 0.5:
+        if math.sqrt((self.position.x - other.position.x) ** 2 + (self.position.y - other.position.y) ** 2) < 0.5:
             return self.position.z < other.position.z
         else:
             return self.position.x + self.position.y < other.position.x + other.position.y
@@ -196,7 +196,7 @@ class ZObject(sf.Drawable):
     # by comparing their virtual 3-D positions.
     #----------------------------------------------------------------------------
     def __gt__(self, other):
-        if abs(self.position.x + self.position.y - other.position.x - other.position.y) <= 0.5:
+        if math.sqrt((self.position.x - other.position.x) ** 2 + (self.position.y - other.position.y) ** 2) < 0.5:
             return self.position.z > other.position.z
         else:
             return self.position.x + self.position.y > other.position.x + other.position.y
@@ -240,4 +240,3 @@ class ZObject(sf.Drawable):
     position = None
     name_ = ""
 #================================================================================
-    

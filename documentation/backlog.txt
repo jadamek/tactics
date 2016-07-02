@@ -20,9 +20,9 @@
 			scrollTo()		X
 			stopScroll()	X
 			scrolling()		X
-			shake()
-			stopShake()
-			shaking()
+			shake()			X
+			stopShake()		X
+			shaking()		X
 			zoom()
 			stopZoom()
 			zooming()

@@ -132,6 +132,48 @@ class ViewEx(sf.View):
         self.scroll_length_ = 0
 
     #----------------------------------------------------------------------------
+    # - Shake
+    #----------------------------------------------------------------------------
+    # * magnitude : amplitude of the vibrational motion in pixels
+    # * frequency : amplitude of the vibrational motion in periods/second
+    # * duration : time in seconds the shake will last. A duration less than 1 is
+    #       an looping (infinite) shake
+    # * direction : direction of the vibration; may be horizontal (0) or vertical
+    #       (1), and defaults to horizontal otherwise
+    #----------------------------------------------------------------------------
+    def shake(self, magnitude, frequency, duration = 0, direction = 0):
+        if magnitude is not 0 and frequency > 0:
+            self.shake_amp_ = magnitude
+            self.shake_freq_ = frequency
+
+            if duration > 0:
+                self.shake_peak_ = math.floor(duration * settings.FPS)
+                self.shake_length_ = self.shake_peak_
+            self.shake_loop_ = duration <= 0
+
+            if direction is not self.SHAKE_HORIZONTAL and direction is not self.SHAKE_VERTICAL:
+                direction = self.SHAKE_HORIZONTAL
+            self.shake_dir_ = direction
+
+    #----------------------------------------------------------------------------
+    # Is Shaking?
+    #----------------------------------------------------------------------------
+    # Returns whether the view is currently shaking
+    #----------------------------------------------------------------------------
+    def shaking(self):
+        return self.shake_loop_ or self.shake_length_ > 0
+
+    #----------------------------------------------------------------------------
+    # Stop Shaking
+    #----------------------------------------------------------------------------
+    # Ceases any shaking motion currently active
+    #----------------------------------------------------------------------------
+    def stop_shaking(self):
+        self.shake_length_ = 0
+        self.shake_loop_ = False
+        self.center = self.center_
+
+    #----------------------------------------------------------------------------
     # - Reset View (Overload)
     #----------------------------------------------------------------------------
     # * rectangle : new viewing zone, top-left corcner on x,y with region size
@@ -166,6 +208,17 @@ class ViewEx(sf.View):
             self.center_ += (self.scroll_target_ - self.center_) / self.scroll_length_
             self.center = self.center_
             self.scroll_length_ -= 1
+
+        # Update Shaking
+        if self.shake_length_ > 0 or self.shake_loop_:
+            wave = self.shake_amp_ * math.sin(2 * math.pi / settings.FPS * self.shake_freq_ * self.shake_length_)
+            self.shake_length_ -= 1
+
+            # Attenuate if finite
+            if not self.shake_loop_:
+                wave *= shake_length_ / self.shake_peak_
+
+            self.center = self.center_ + sf.Vector2(wave * (1 - self.shake_dir_), wave * self.shake_dir_)            
 
     #----------------------------------------------------------------------------
     # Update
@@ -217,4 +270,6 @@ class ViewEx(sf.View):
 # Shake direction named constants
     SHAKE_HORIZONTAL = 0
     SHAKE_VERTICAL = 1
+    SPIN_CLOCKWISE = 0
+    SPIN_COUNTER_CLOCKWISE = 1
 #================================================================================
