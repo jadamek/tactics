@@ -12,10 +12,10 @@
 			step()			X	X
 -	Screen Control
 		ViewEx
-			flash()
-			flashing()
-			fadeIn/Out()
-			tint()
+			flash()			X
+			flashing()		X
+			fadeIn/Out()	X
+			tint()			X
 			scroll()		X
 			scrollTo()		X
 			stopScroll()	X
@@ -23,15 +23,15 @@
 			shake()			X
 			stopShake()		X
 			shaking()		X
-			zoom()
-			stopZoom()
-			zooming()
-			spin()
-			stopSpin()
-			spinning()
+			zoom()			X
+			stopZoom()		X
+			zooming()		X
+			spin()			X
+			stopSpin()		X
+			spinning()		X
 			update()		X
-			step()
-			draw()			X	
+			step()			X
+			draw_overlays()	X	
 -	Animated Objects
 		Animation
 			play()

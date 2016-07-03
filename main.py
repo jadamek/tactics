@@ -51,16 +51,20 @@ target = sf.Texture.from_file('resources/graphics/Target.png')
 cursor = sf.Sprite(target)
 cursor.move(sf.Vector2(-8,-8))
 
-window = sf.RenderWindow(sf.VideoMode(640, 480), 'Tactics!')
+window = sf.RenderWindow(sf.VideoMode(1280, 720), 'Tactics!')
 window.framerate_limit = 60
 
-path = [sf.Vector2(80, 60), sf.Vector2(-60, 80), sf.Vector2(-80, -60), sf.Vector2(60, -80)]
-p = 0
+tints = [sf.Color(255, 0, 0, 40), sf.Color(0, 255, 0, 40), sf.Color(0, 0, 255, 40), sf.Color(255, 255, 255, 40)]
+t = 0
 
-view = ViewEx(sf.Rectangle((-320, -240), (640, 480)))
+view = ViewEx(sf.Rectangle((-320, -240), (1280, 720)))
 window.view = view
+view.fade_in(3)
+
 clock = sf.Clock()
 elapsed = 0.0
+
+closing = False
 
 while window.is_open:
     for event in window.events:
@@ -95,23 +99,46 @@ while window.is_open:
         elif not soul.moving():
             soul.moveTo(soul.position + sf.Vector3(0, 1.0, 0))
 
-    elif sf.Keyboard.is_key_pressed(sf.Keyboard.S):
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.Q):
         if sf.Keyboard.is_key_pressed(sf.Keyboard.L_CONTROL):
             view.stop_shaking()
         elif not view.shaking():
-            view.shake(32.0, 0.2)
+            view.shake(16.0, 2)
+    
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.S):
+        if sf.Keyboard.is_key_pressed(sf.Keyboard.L_CONTROL):
+            view.stop_spinning()
+        elif not view.spinning():
+            view.spin(0.5)
+    
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.ADD):
+        if not view.zooming():
+            view.zoom(-0.25, 2)
 
-    elif sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE):
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.SUBTRACT):
+        if not view.zooming():
+            view.zoom(0.25, 2)
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.T) and not view.tinting():
+        view.tint(tints[t], 3)
+        t = (t + 1) % 4
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.F) and not view.flashing():
+        view.flash(1)
+
+    elif sf.Keyboard.is_key_pressed(sf.Keyboard.ESCAPE) and not view.tinting():
+        view.fade_out(3)
+        closing = True
+
+    elif closing and not view.tinting():
         window.close()
-
-        view.scroll(path[p], 3)
-        p = (p + 1) % 4
-
+        
     elapsed = clock.restart().seconds
     soul.update(elapsed)
     view.update(elapsed)
     window.clear()
     window.draw(map)
     window.draw(cursor)
+    view.draw_overlays(window)
     window.display()
 
