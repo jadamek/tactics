@@ -1,7 +1,7 @@
 import sys, os
+from sfml import sf
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 import settings, copy, math
-from sfml import sf
 
 #================================================================================
 class ViewEx(sf.View):
@@ -13,11 +13,11 @@ class ViewEx(sf.View):
     #----------------------------------------------------------------------------
     # - ViewEx Constructor
     #----------------------------------------------------------------------------
-    # * rectangle :  intial viewing zone, top-left corcner at x,y with view size
+    # * Rect :  intial viewing zone, top-left corcner at x,y with view size
     #       width, height
     #----------------------------------------------------------------------------
-    def __init__(self, rectangle = sf.Rectangle(sf.Vector2(), sf.Vector2(640, 480))):
-        sf.View.__init__(self, rectangle)
+    def __init__(self, Rect = sf.Rect(sf.Vector2(), sf.Vector2(640, 480))):
+        sf.View.__init__(self, Rect)
 
         self.center_ = self.center
         self.rotation_ = 0.0
@@ -308,17 +308,17 @@ class ViewEx(sf.View):
     #----------------------------------------------------------------------------
     # - Reset View (Overload)
     #----------------------------------------------------------------------------
-    # * rectangle : new viewing zone, top-left corcner on x,y with region size
+    # * Rect : new viewing zone, top-left corcner on x,y with region size
     #       width, height
     # Overloaded to include updates for extensions, returning the screen to its
     # true center, rotation and 1.0 zoom factor, as well as ceasing any active
     # extended actions such as spinning or shaking.
     #----------------------------------------------------------------------------
-    def reset(self, rectangle):
-        super(ViewEx, self).reset(rectangle)
+    def reset(self, Rect):
+        super(ViewEx, self).reset(Rect)
         self.zoom_ = 1.0
         self.set_center(self.center)
-        self.set_size(rectangle.size)
+        self.set_size(Rect.size)
         self.set_rotation(self.rotation)
         self.stop_scrolling()
         self.stop_shaking()
