@@ -1,4 +1,5 @@
-import unittest, sfml as sf, random
+import unittest, random
+from sfml import sf
 from view_ex import ViewEx
 
 #------------------------------------------------------------------------------------

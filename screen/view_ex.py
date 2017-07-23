@@ -1,7 +1,7 @@
 import sys, os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
-
-import settings, sfml as sf, copy, math
+import settings, copy, math
+from sfml import sf
 
 #================================================================================
 class ViewEx(sf.View):
